@@ -7,52 +7,51 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Proyecto {
-    private String nombre;
-    private String descripcion;
-    private List<Tarea> tareas;
-    private List<Empleado> empleados;
+	private String nombre;
+	private String descripcion;
+	private List<Tarea> tareas;
+	private List<Empleado> empleados;
 
-    // Constructor
-    public Proyecto(String nombre, String descripcion) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.tareas = new ArrayList<>();
-        this.empleados = new ArrayList<>();
-    }
+	// Constructor
+	public Proyecto(String nombre, String descripcion) {
+		this.nombre = nombre;
+		this.descripcion = descripcion;
+		this.tareas = new ArrayList<>();
+		this.empleados = new ArrayList<>();
+	}
 
-    // Getters y setters
-    public String getNombre() {
-        return nombre;
-    }
+	// Getters y setters
+	public String getNombre() {
+		return nombre;
+	}
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
 
-    public String getDescripcion() {
-        return descripcion;
-    }
+	public String getDescripcion() {
+		return descripcion;
+	}
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
 
-    public List<Tarea> getTareas() {
-        return tareas;
-    }
+	public List<Tarea> getTareas() {
+		return tareas;
+	}
 
-    public void setTareas(List<Tarea> tareas) {
-        this.tareas = tareas;
-    }
+	public void setTareas(List<Tarea> tareas) {
+		this.tareas = tareas;
+	}
 
-    public List<Empleado> getEmpleados() {
-        return empleados;
-    }
+	public List<Empleado> getEmpleados() {
+		return empleados;
+	}
 
-    public void setEmpleados(List<Empleado> empleados) {
-        this.empleados = empleados;
-    }
+	public void setEmpleados(List<Empleado> empleados) {
+		this.empleados = empleados;
+	}
 
-    // Otros métodos si los necesitas
+	// Otros métodos si los necesitas
 }
-
