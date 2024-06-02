@@ -22,7 +22,6 @@ public class HistorialTarea {
         this.responsable = responsable;
     }
 
-    // Getters y Setters
     public int getId() {
         return id;
     }

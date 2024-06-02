@@ -16,7 +16,6 @@ public class KanbanBoard {
         this.done = done;
     }
 
-    // Getters y Setters
     public List<Tarea> getBacklog() {
         return backlog;
     }

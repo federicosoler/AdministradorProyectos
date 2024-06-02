@@ -6,21 +6,25 @@ import AdministradorProyectos.Tarea.Tarea;
 import AdministradorProyectos.Sprint.Sprint;
 
 public class Proyecto {
-    private int id;
-    private String nombre;
-    private List<Empleado> empleadosAsignados;
-    private List<Tarea> tareas;
-    private List<Sprint> sprints;
+	private int id;
+	private String nombre;
+	private String descripcion;
+	private List<Empleado> empleadosAsignados;
+	private List<Tarea> tareas;
+	private List<Sprint> sprints;
 
-    // Constructor, getters y setters
+	public Proyecto(int id, String nombre, List<Empleado> empleadosAsignados, List<Tarea> tareas,
+			List<Sprint> sprints) {
+		this.setId(id);
+		this.setNombre(nombre);
+		this.setEmpleadosAsignados(empleadosAsignados);
+		this.setTareas(tareas);
+		this.setSprints(sprints);
+	}
 
-    public Proyecto(int id, String nombre, List<Empleado> empleadosAsignados, List<Tarea> tareas, List<Sprint> sprints) {
-        this.setId(id);
-        this.setNombre(nombre);
-        this.setEmpleadosAsignados(empleadosAsignados);
-        this.setTareas(tareas);
-        this.setSprints(sprints);
-    }
+	public Proyecto(String string, String string2) {
+		// TODO Auto-generated constructor stub
+	}
 
 	public int getId() {
 		return id;
@@ -36,6 +40,14 @@ public class Proyecto {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 
 	public List<Empleado> getEmpleadosAsignados() {
@@ -62,6 +74,4 @@ public class Proyecto {
 		this.sprints = sprints;
 	}
 
-    // Getters y Setters
-    // (agregar todos los métodos necesarios aquí)
 }

@@ -22,7 +22,6 @@ public class Sprint {
         this.tareas = tareas;
     }
 
-    // Getters y Setters
     public int getId() {
         return id;
     }

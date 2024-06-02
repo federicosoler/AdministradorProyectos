@@ -6,5 +6,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="E:/UP/Laboratorio I/Eclipse Workspace/AdministradorProyectos/lib/bin/h2-2.2.224.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
