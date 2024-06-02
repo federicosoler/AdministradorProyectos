@@ -1,37 +1,25 @@
 package AdministradorProyectos.Proyecto;
 
+import java.util.ArrayList;
 import java.util.List;
+
 import AdministradorProyectos.Empleado.Empleado;
 import AdministradorProyectos.Tarea.Tarea;
 import AdministradorProyectos.Sprint.Sprint;
 
 public class Proyecto {
-	private int id;
 	private String nombre;
 	private String descripcion;
 	private List<Empleado> empleadosAsignados;
 	private List<Tarea> tareas;
 	private List<Sprint> sprints;
 
-	public Proyecto(int id, String nombre, List<Empleado> empleadosAsignados, List<Tarea> tareas,
-			List<Sprint> sprints) {
-		this.setId(id);
-		this.setNombre(nombre);
-		this.setEmpleadosAsignados(empleadosAsignados);
-		this.setTareas(tareas);
-		this.setSprints(sprints);
-	}
-
-	public Proyecto(String string, String string2) {
-		// TODO Auto-generated constructor stub
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
+	public Proyecto(String nombre, String descripcion) {
+		this.nombre = nombre;
+		this.descripcion = descripcion;
+		this.empleadosAsignados = new ArrayList<>();
+		this.tareas = new ArrayList<>();
+		this.sprints = new ArrayList<>();
 	}
 
 	public String getNombre() {
@@ -74,4 +62,15 @@ public class Proyecto {
 		this.sprints = sprints;
 	}
 
+	public void agregarTarea(Tarea tarea) {
+		this.tareas.add(tarea);
+	}
+
+	public void agregarEmpleado(Empleado empleado) {
+		this.empleadosAsignados.add(empleado);
+	}
+
+	public void agregarSprint(Sprint sprint) {
+		this.sprints.add(sprint);
+	}
 }

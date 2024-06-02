@@ -1,73 +1,51 @@
 package AdministradorProyectos.HistorialTarea;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
-import AdministradorProyectos.Tarea.Tarea;
 import AdministradorProyectos.Empleado.Empleado;
 
 public class HistorialTarea {
-    private int id;
-    private Tarea tarea;
-    private String estadoAnterior;
-    private String nuevoEstado;
-    private Date fechaCambio;
-    private Empleado responsable;
+	private String estadoAnterior;
+	private String nuevoEstado;
+	private Empleado responsable;
+	private LocalDateTime fechaCambio;
 
-    public HistorialTarea(int id, Tarea tarea, String estadoAnterior, String nuevoEstado, Date fechaCambio, Empleado responsable) {
-        this.id = id;
-        this.tarea = tarea;
-        this.estadoAnterior = estadoAnterior;
-        this.nuevoEstado = nuevoEstado;
-        this.fechaCambio = fechaCambio;
-        this.responsable = responsable;
-    }
+	public HistorialTarea(String estadoAnterior, String nuevoEstado, Empleado responsable, LocalDateTime fechaCambio) {
+		this.estadoAnterior = estadoAnterior;
+		this.nuevoEstado = nuevoEstado;
+		this.responsable = responsable;
+		this.fechaCambio = fechaCambio;
+	}
 
-    public int getId() {
-        return id;
-    }
+	public String getEstadoAnterior() {
+		return estadoAnterior;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public void setEstadoAnterior(String estadoAnterior) {
+		this.estadoAnterior = estadoAnterior;
+	}
 
-    public Tarea getTarea() {
-        return tarea;
-    }
+	public String getNuevoEstado() {
+		return nuevoEstado;
+	}
 
-    public void setTarea(Tarea tarea) {
-        this.tarea = tarea;
-    }
+	public void setNuevoEstado(String nuevoEstado) {
+		this.nuevoEstado = nuevoEstado;
+	}
 
-    public String getEstadoAnterior() {
-        return estadoAnterior;
-    }
+	public Empleado getResponsable() {
+		return responsable;
+	}
 
-    public void setEstadoAnterior(String estadoAnterior) {
-        this.estadoAnterior = estadoAnterior;
-    }
+	public void setResponsable(Empleado responsable) {
+		this.responsable = responsable;
+	}
 
-    public String getNuevoEstado() {
-        return nuevoEstado;
-    }
+	public LocalDateTime getFechaCambio() {
+		return fechaCambio;
+	}
 
-    public void setNuevoEstado(String nuevoEstado) {
-        this.nuevoEstado = nuevoEstado;
-    }
-
-    public Date getFechaCambio() {
-        return fechaCambio;
-    }
-
-    public void setFechaCambio(Date fechaCambio) {
-        this.fechaCambio = fechaCambio;
-    }
-
-    public Empleado getResponsable() {
-        return responsable;
-    }
-
-    public void setResponsable(Empleado responsable) {
-        this.responsable = responsable;
-    }
+	public void setFechaCambio(LocalDateTime fechaCambio) {
+		this.fechaCambio = fechaCambio;
+	}
 }
-

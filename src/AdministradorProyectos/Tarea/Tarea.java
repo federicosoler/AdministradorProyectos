@@ -2,37 +2,24 @@ package AdministradorProyectos.Tarea;
 
 import AdministradorProyectos.Empleado.Empleado;
 import AdministradorProyectos.Proyecto.Proyecto;
-import AdministradorProyectos.Sprint.Sprint;
 
 public class Tarea {
-    private int id;
-    private String titulo;
-    private String descripcion;
-    private int estimacionHoras;
-    private int horasReales;
-    private Empleado empleadoAsignado;
-    private Proyecto proyecto;
-    private Sprint sprint;
-    private String estado;
+	private String titulo;
+	private String descripcion;
+	private int estimacionHoras;
+	private int horasReales;
+	private String estado;
+	private Empleado responsable;
+	private Proyecto proyecto;
 
-    public Tarea(int id, String titulo, String descripcion, int estimacionHoras, int horasReales, Empleado empleadoAsignado, Proyecto proyecto, Sprint sprint, String estado) {
-        this.setId(id);
-        this.setTitulo(titulo);
-        this.setDescripcion(descripcion);
-        this.setEstimacionHoras(estimacionHoras);
-        this.setHorasReales(horasReales);
-        this.setEmpleadoAsignado(empleadoAsignado);
-        this.setProyecto(proyecto);
-        this.setSprint(sprint);
-        this.setEstado(estado);
-    }
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
+	public Tarea(String titulo, String descripcion, int estimacionHoras, Proyecto proyecto, Empleado responsable) {
+		this.titulo = titulo;
+		this.descripcion = descripcion;
+		this.estimacionHoras = estimacionHoras;
+		this.horasReales = 0;
+		this.estado = "Pendiente";
+		this.proyecto = proyecto;
+		this.responsable = responsable;
 	}
 
 	public String getTitulo() {
@@ -67,12 +54,20 @@ public class Tarea {
 		this.horasReales = horasReales;
 	}
 
-	public Empleado getEmpleadoAsignado() {
-		return empleadoAsignado;
+	public String getEstado() {
+		return estado;
 	}
 
-	public void setEmpleadoAsignado(Empleado empleadoAsignado) {
-		this.empleadoAsignado = empleadoAsignado;
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	public Empleado getResponsable() {
+		return responsable;
+	}
+
+	public void setResponsable(Empleado responsable) {
+		this.responsable = responsable;
 	}
 
 	public Proyecto getProyecto() {
@@ -82,22 +77,4 @@ public class Tarea {
 	public void setProyecto(Proyecto proyecto) {
 		this.proyecto = proyecto;
 	}
-
-	public Sprint getSprint() {
-		return sprint;
-	}
-
-	public void setSprint(Sprint sprint) {
-		this.sprint = sprint;
-	}
-
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-
-
 }

@@ -5,8 +5,8 @@ public class Empleado {
 	private double costoHora;
 
 	public Empleado(String nombre, double costoHora) {
-		this.setNombre(nombre);
-		this.setCostoHora(costoHora);
+		this.nombre = nombre;
+		this.costoHora = costoHora;
 	}
 
 	public String getNombre() {
@@ -24,5 +24,4 @@ public class Empleado {
 	public void setCostoHora(double costoHora) {
 		this.costoHora = costoHora;
 	}
-
 }
