@@ -8,12 +8,14 @@ public class EmpleadoH2Impl implements EmpleadoDAO {
 	private Connection conexion;
 
 	public EmpleadoH2Impl() {
-		try {
-			this.conexion = DriverManager.getConnection("jdbc:h2:~/test", "sa", "");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+        try {
+            String url = "jdbc:h2:file:E:/UP/Laboratorio I/Eclipse Workspace/AdministradorProyectos/db/EMPLEADO";
+            conexion = DriverManager.getConnection(url, "sa", "");
+            TableManagerEmpleado.crearTabla();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 	@Override
 	public void guardarEmpleado(Empleado empleado) {

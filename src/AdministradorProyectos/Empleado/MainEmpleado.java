@@ -3,15 +3,16 @@ package AdministradorProyectos.Empleado;
 import javax.swing.SwingUtilities;
 
 public class MainEmpleado {
-    public static void main(String[] args) {
-        EmpleadoDAO empleadoDAO = new EmpleadoH2Impl();
-        EmpleadoService empleadoService = new EmpleadoService(empleadoDAO);
+	public static void main(String[] args) {
+		EmpleadoDAO empleadoDAO = new EmpleadoH2Impl();
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                EmpleadoUI frame = new EmpleadoUI(empleadoService);
-                frame.setVisible(true);
-            }
-        });
-    }
+		EmpleadoService empleadoService = new EmpleadoService(empleadoDAO);
+
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				EmpleadoUI frame = new EmpleadoUI(empleadoService);
+				frame.setVisible(true);
+			}
+		});
+	}
 }
