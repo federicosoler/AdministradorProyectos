@@ -7,7 +7,6 @@ public class MainEmpleado {
         EmpleadoDAO empleadoDAO = new EmpleadoH2Impl();
         EmpleadoService empleadoService = new EmpleadoService(empleadoDAO);
 
-        // Iniciar la interfaz gráfica
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 EmpleadoUI frame = new EmpleadoUI(empleadoService);
