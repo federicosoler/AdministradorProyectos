@@ -1,20 +1,38 @@
 package AdministradorProyectos.Tarea;
 
 import AdministradorProyectos.Empleado.Empleado;
+import AdministradorProyectos.Proyecto.Proyecto;
+import AdministradorProyectos.Sprint.Sprint;
 
 public class Tarea {
-	private String titulo;
-	private String descripcion;
-	private int estimacionHoras;
-	private int horasReales;
-	private Empleado empleadoAsignado;
+    private int id;
+    private String titulo;
+    private String descripcion;
+    private int estimacionHoras;
+    private int horasReales;
+    private Empleado empleadoAsignado;
+    private Proyecto proyecto;
+    private Sprint sprint;
+    private String estado;
 
-	// Constructor
-	public Tarea(String titulo, String descripcion, int estimacionHoras) {
-		this.setTitulo(titulo);
-		this.setDescripcion(descripcion);
-		this.setEstimacionHoras(estimacionHoras);
-		this.setHorasReales(0); // Por defecto, las horas reales son 0 al crear una nueva tarea
+    public Tarea(int id, String titulo, String descripcion, int estimacionHoras, int horasReales, Empleado empleadoAsignado, Proyecto proyecto, Sprint sprint, String estado) {
+        this.setId(id);
+        this.setTitulo(titulo);
+        this.setDescripcion(descripcion);
+        this.setEstimacionHoras(estimacionHoras);
+        this.setHorasReales(horasReales);
+        this.setEmpleadoAsignado(empleadoAsignado);
+        this.setProyecto(proyecto);
+        this.setSprint(sprint);
+        this.setEstado(estado);
+    }
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getTitulo() {
@@ -56,5 +74,30 @@ public class Tarea {
 	public void setEmpleadoAsignado(Empleado empleadoAsignado) {
 		this.empleadoAsignado = empleadoAsignado;
 	}
+
+	public Proyecto getProyecto() {
+		return proyecto;
+	}
+
+	public void setProyecto(Proyecto proyecto) {
+		this.proyecto = proyecto;
+	}
+
+	public Sprint getSprint() {
+		return sprint;
+	}
+
+	public void setSprint(Sprint sprint) {
+		this.sprint = sprint;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
 
 }

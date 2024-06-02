@@ -1,26 +1,35 @@
 package AdministradorProyectos.Proyecto;
 
-import AdministradorProyectos.Tarea.Tarea;
-import AdministradorProyectos.Empleado.Empleado;
-
-import java.util.ArrayList;
 import java.util.List;
+import AdministradorProyectos.Empleado.Empleado;
+import AdministradorProyectos.Tarea.Tarea;
+import AdministradorProyectos.Sprint.Sprint;
 
 public class Proyecto {
-	private String nombre;
-	private String descripcion;
-	private List<Tarea> tareas;
-	private List<Empleado> empleados;
+    private int id;
+    private String nombre;
+    private List<Empleado> empleadosAsignados;
+    private List<Tarea> tareas;
+    private List<Sprint> sprints;
 
-	// Constructor
-	public Proyecto(String nombre, String descripcion) {
-		this.nombre = nombre;
-		this.descripcion = descripcion;
-		this.tareas = new ArrayList<>();
-		this.empleados = new ArrayList<>();
+    // Constructor, getters y setters
+
+    public Proyecto(int id, String nombre, List<Empleado> empleadosAsignados, List<Tarea> tareas, List<Sprint> sprints) {
+        this.setId(id);
+        this.setNombre(nombre);
+        this.setEmpleadosAsignados(empleadosAsignados);
+        this.setTareas(tareas);
+        this.setSprints(sprints);
+    }
+
+	public int getId() {
+		return id;
 	}
 
-	// Getters y setters
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public String getNombre() {
 		return nombre;
 	}
@@ -29,12 +38,12 @@ public class Proyecto {
 		this.nombre = nombre;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
+	public List<Empleado> getEmpleadosAsignados() {
+		return empleadosAsignados;
 	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setEmpleadosAsignados(List<Empleado> empleadosAsignados) {
+		this.empleadosAsignados = empleadosAsignados;
 	}
 
 	public List<Tarea> getTareas() {
@@ -45,13 +54,14 @@ public class Proyecto {
 		this.tareas = tareas;
 	}
 
-	public List<Empleado> getEmpleados() {
-		return empleados;
+	public List<Sprint> getSprints() {
+		return sprints;
 	}
 
-	public void setEmpleados(List<Empleado> empleados) {
-		this.empleados = empleados;
+	public void setSprints(List<Sprint> sprints) {
+		this.sprints = sprints;
 	}
 
-	// Otros métodos si los necesitas
+    // Getters y Setters
+    // (agregar todos los métodos necesarios aquí)
 }
