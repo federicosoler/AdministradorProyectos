@@ -12,7 +12,7 @@ public class TableManagerProyecto {
         String password = "";
         String sqlProyecto = "CREATE TABLE IF NOT EXISTS PROYECTO " +
                              "(NOMBRE VARCHAR(255) PRIMARY KEY, " +
-                             "DESCRIPCION VARCHAR(255))";
+                             "DESCRIPCION VARCHAR(255) NOT NULL)";
         String sqlHistorial = "CREATE TABLE IF NOT EXISTS HISTORIAL_TAREA " +
                               "(ESTADO_ANTERIOR VARCHAR(255), " +
                               "NUEVO_ESTADO VARCHAR(255), " +

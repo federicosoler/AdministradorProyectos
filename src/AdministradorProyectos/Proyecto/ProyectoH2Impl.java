@@ -4,9 +4,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import AdministradorProyectos.Empleado.Empleado;
-import AdministradorProyectos.HistorialTarea.HistorialTarea;
-
 public class ProyectoH2Impl implements ProyectoDAO {
     private Connection conexion;
 
@@ -20,11 +17,21 @@ public class ProyectoH2Impl implements ProyectoDAO {
 
     @Override
     public void guardarProyecto(Proyecto proyecto) {
+        if (proyecto.getNombre() == null || proyecto.getDescripcion() == null) {
+            System.out.println("Error: nombre o descripción del proyecto es null");
+            return;
+        }
+
         String sql = "INSERT INTO PROYECTO (NOMBRE, DESCRIPCION) VALUES (?, ?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, proyecto.getNombre());
             stmt.setString(2, proyecto.getDescripcion());
-            stmt.executeUpdate();
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Proyecto guardado correctamente: " + proyecto.getNombre());
+            } else {
+                System.out.println("Error al guardar el proyecto: " + proyecto.getNombre());
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -38,8 +45,10 @@ public class ProyectoH2Impl implements ProyectoDAO {
             stmt.setString(1, nombre);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
+                System.out.println("Proyecto encontrado: " + rs.getString("NOMBRE"));
                 proyecto = new Proyecto(rs.getString("NOMBRE"), rs.getString("DESCRIPCION"));
-                // Aquí debes agregar la lógica para cargar las listas de Empleados, Tareas y Sprints
+            } else {
+                System.out.println("Proyecto no encontrado: " + nombre);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -54,9 +63,15 @@ public class ProyectoH2Impl implements ProyectoDAO {
         try (Statement stmt = conexion.createStatement()) {
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                Proyecto proyecto = new Proyecto(rs.getString("NOMBRE"), rs.getString("DESCRIPCION"));
-                // Aquí debes agregar la lógica para cargar las listas de Empleados, Tareas y Sprints
-                proyectos.add(proyecto);
+                String nombre = rs.getString("NOMBRE");
+                String descripcion = rs.getString("DESCRIPCION");
+                if (nombre != null && descripcion != null) {
+                    Proyecto proyecto = new Proyecto(nombre, descripcion);
+                    proyectos.add(proyecto);
+                    System.out.println("Proyecto recuperado: " + nombre);
+                } else {
+                    System.out.println("Datos del proyecto nulos encontrados");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -70,7 +85,12 @@ public class ProyectoH2Impl implements ProyectoDAO {
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, proyecto.getDescripcion());
             stmt.setString(2, proyecto.getNombre());
-            stmt.executeUpdate();
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Proyecto actualizado correctamente: " + proyecto.getNombre());
+            } else {
+                System.out.println("Error al actualizar el proyecto: " + proyecto.getNombre());
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -81,45 +101,14 @@ public class ProyectoH2Impl implements ProyectoDAO {
         String sql = "DELETE FROM PROYECTO WHERE NOMBRE = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, nombre);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Métodos adicionales para manejar el historial de tareas
-
-    public void guardarHistorialTarea(HistorialTarea historial) {
-        String sql = "INSERT INTO HISTORIAL_TAREA (ESTADO_ANTERIOR, NUEVO_ESTADO, RESPONSABLE, FECHA_CAMBIO) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
-            stmt.setString(1, historial.getEstadoAnterior());
-            stmt.setString(2, historial.getNuevoEstado());
-            stmt.setString(3, historial.getResponsable().getNombre());
-            stmt.setTimestamp(4, Timestamp.valueOf(historial.getFechaCambio()));
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public List<HistorialTarea> obtenerHistorialPorTarea(String tareaTitulo) {
-        List<HistorialTarea> historial = new ArrayList<>();
-        String sql = "SELECT * FROM HISTORIAL_TAREA WHERE TAREA_TITULO = ?";
-        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
-            stmt.setString(1, tareaTitulo);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                HistorialTarea hist = new HistorialTarea(
-                        rs.getString("ESTADO_ANTERIOR"),
-                        rs.getString("NUEVO_ESTADO"),
-                        new Empleado(rs.getString("RESPONSABLE"), 0),  // Aquí deberías recuperar el objeto Empleado completo
-                        rs.getTimestamp("FECHA_CAMBIO").toLocalDateTime()
-                );
-                historial.add(hist);
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Proyecto eliminado correctamente: " + nombre);
+            } else {
+                System.out.println("No se encontró el proyecto con nombre: " + nombre);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return historial;
     }
 }

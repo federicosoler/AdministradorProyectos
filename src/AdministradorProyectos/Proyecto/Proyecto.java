@@ -2,7 +2,6 @@ package AdministradorProyectos.Proyecto;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import AdministradorProyectos.Empleado.Empleado;
 import AdministradorProyectos.Tarea.Tarea;
 import AdministradorProyectos.Sprint.Sprint;
