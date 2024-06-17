@@ -1,5 +1,8 @@
 package AdministradorProyectos.Empleado;
 
+import AdministradorProyectos.Exceptions.DAOException;
+import AdministradorProyectos.Exceptions.ServiceException;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -77,36 +80,49 @@ public class EmpleadoUI extends JFrame {
 	}
 
 	private void cargarEmpleados() {
-		List<Empleado> empleados = empleadoService.obtenerTodosLosEmpleados();
-		tableModel.setRowCount(0); // Clear the table
-		for (Empleado empleado : empleados) {
-			tableModel.addRow(new Object[] { empleado.getNombre(), empleado.getCostoHora() });
+		try {
+			List<Empleado> empleados = empleadoService.obtenerTodosLosEmpleados();
+			tableModel.setRowCount(0);
+			for (Empleado empleado : empleados) {
+				tableModel.addRow(new Object[] { empleado.getNombre(), empleado.getCostoHora() });
+			}
+		} catch (ServiceException e) {
+			JOptionPane.showMessageDialog(this, "Error al cargar empleados: " + e.getMessage());
 		}
 	}
 
 	private void agregarEmpleado() {
-		String nombre = nombreField.getText();
-		double costoHora = Double.parseDouble(costoHoraField.getText());
-		Empleado nuevoEmpleado = new Empleado(nombre, costoHora);
-		empleadoService.agregarEmpleado(nuevoEmpleado);
-		cargarEmpleados();
-		JOptionPane.showMessageDialog(this, "Empleado agregado correctamente.");
+		try {
+			String nombre = nombreField.getText();
+			double costoHora = Double.parseDouble(costoHoraField.getText());
+			Empleado nuevoEmpleado = new Empleado(nombre, costoHora);
+			empleadoService.agregarEmpleado(nuevoEmpleado);
+			cargarEmpleados();
+			JOptionPane.showMessageDialog(this, "Empleado agregado correctamente.");
+		} catch (NumberFormatException ex) {
+			JOptionPane.showMessageDialog(this, "Formato de costo por hora inválido.");
+		} catch (ServiceException ex) {
+			JOptionPane.showMessageDialog(this, "Error al agregar empleado: " + ex.getMessage());
+		}
 	}
 
 	private void actualizarEmpleado() {
 		int selectedRow = table.getSelectedRow();
 		if (selectedRow >= 0) {
-			String nombreAntiguo = (String) tableModel.getValueAt(selectedRow, 0);
-			String nombreNuevo = nombreField.getText();
-			double costoHora = Double.parseDouble(costoHoraField.getText());
-
-			empleadoService.eliminarEmpleado(nombreAntiguo);
-
-			Empleado empleado = new Empleado(nombreNuevo, costoHora);
-			empleadoService.agregarEmpleado(empleado);
-
-			cargarEmpleados();
-			JOptionPane.showMessageDialog(this, "Empleado actualizado correctamente.");
+			try {
+				String nombreAntiguo = (String) tableModel.getValueAt(selectedRow, 0);
+				String nombreNuevo = nombreField.getText();
+				double costoHora = Double.parseDouble(costoHoraField.getText());
+				empleadoService.eliminarEmpleado(nombreAntiguo);
+				Empleado empleado = new Empleado(nombreNuevo, costoHora);
+				empleadoService.agregarEmpleado(empleado);
+				cargarEmpleados();
+				JOptionPane.showMessageDialog(this, "Empleado actualizado correctamente.");
+			} catch (NumberFormatException ex) {
+				JOptionPane.showMessageDialog(this, "Formato de costo por hora inválido.");
+			} catch (ServiceException ex) {
+				JOptionPane.showMessageDialog(this, "Error al actualizar empleado: " + ex.getMessage());
+			}
 		} else {
 			JOptionPane.showMessageDialog(this, "Seleccione un empleado para actualizar.");
 		}
@@ -115,19 +131,28 @@ public class EmpleadoUI extends JFrame {
 	private void eliminarEmpleado() {
 		int selectedRow = table.getSelectedRow();
 		if (selectedRow >= 0) {
-			String nombre = (String) tableModel.getValueAt(selectedRow, 0);
-			empleadoService.eliminarEmpleado(nombre);
-			cargarEmpleados();
-			JOptionPane.showMessageDialog(this, "Empleado eliminado correctamente.");
+			try {
+				String nombre = (String) tableModel.getValueAt(selectedRow, 0);
+				empleadoService.eliminarEmpleado(nombre);
+				cargarEmpleados();
+				JOptionPane.showMessageDialog(this, "Empleado eliminado correctamente.");
+			} catch (ServiceException ex) {
+				JOptionPane.showMessageDialog(this, "Error al eliminar empleado: " + ex.getMessage());
+			}
 		} else {
 			JOptionPane.showMessageDialog(this, "Seleccione un empleado para eliminar.");
 		}
 	}
 
 	public static void main(String[] args) {
-		EmpleadoDAO empleadoDAO = new EmpleadoH2Impl();
-		EmpleadoService empleadoService = new EmpleadoService(empleadoDAO);
-		EmpleadoUI frame = new EmpleadoUI(empleadoService);
-		frame.setVisible(true);
+		try {
+			EmpleadoDAO empleadoDAO = new EmpleadoH2Impl();
+			EmpleadoService empleadoService = new EmpleadoService(empleadoDAO);
+			EmpleadoUI frame = new EmpleadoUI(empleadoService);
+			frame.setVisible(true);
+		} catch (DAOException e) {
+			JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos: " + e.getMessage());
+			System.exit(1);
+		}
 	}
 }
