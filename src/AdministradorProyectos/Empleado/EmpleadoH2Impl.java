@@ -13,18 +13,18 @@ public class EmpleadoH2Impl implements EmpleadoDAO {
 	private String password = "";
 
 	public EmpleadoH2Impl() throws DAOException {
-        try {     	
-            conexion = DriverManager.getConnection(url, user, password);
-            crearTabla(conexion);
-        } catch (SQLException e) {
-        	throw new DAOException("Error al conectar con la base de datos", e);
-        }
-    }
-	
+		try {
+			conexion = DriverManager.getConnection(url, user, password);
+			crearTabla(conexion);
+		} catch (SQLException e) {
+			throw new DAOException("Error al conectar con la base de datos", e);
+		}
+	}
+
 	private void crearTabla(Connection conexion) {
 		String sqlEmpleado = "CREATE TABLE IF NOT EXISTS EMPLEADO " + "(NOMBRE VARCHAR(255) PRIMARY KEY, "
 				+ "COSTO_HORA DOUBLE)";
-		
+
 		try (Statement stmt = conexion.createStatement()) {
 			stmt.execute(sqlEmpleado);
 			System.out.println("Tabla EMPLEADO creada exitosamente.");
