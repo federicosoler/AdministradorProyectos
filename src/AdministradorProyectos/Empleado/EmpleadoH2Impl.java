@@ -8,16 +8,30 @@ import java.util.List;
 
 public class EmpleadoH2Impl implements EmpleadoDAO {
 	private Connection conexion;
+	private String url = "jdbc:h2:file:E:/UP/Laboratorio I/Eclipse Workspace/AdministradorProyectos/db/EMPLEADO";
+	private String user = "sa";
+	private String password = "";
 
 	public EmpleadoH2Impl() throws DAOException {
-        try {
-            String url = "jdbc:h2:file:E:/UP/Laboratorio I/Eclipse Workspace/AdministradorProyectos/db/EMPLEADO";
-            conexion = DriverManager.getConnection(url, "sa", "");
-            TableManagerEmpleado.crearTabla();
+        try {     	
+            conexion = DriverManager.getConnection(url, user, password);
+            crearTabla(conexion);
         } catch (SQLException e) {
         	throw new DAOException("Error al conectar con la base de datos", e);
         }
     }
+	
+	private void crearTabla(Connection conexion) {
+		String sqlEmpleado = "CREATE TABLE IF NOT EXISTS EMPLEADO " + "(NOMBRE VARCHAR(255) PRIMARY KEY, "
+				+ "COSTO_HORA DOUBLE)";
+		
+		try (Statement stmt = conexion.createStatement()) {
+			stmt.execute(sqlEmpleado);
+			System.out.println("Tabla EMPLEADO creada exitosamente.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	public void guardarEmpleado(Empleado empleado) throws DAOException {
