@@ -14,8 +14,6 @@ public class Proyecto {
         this.empleadosAsignados = new ArrayList<>();
     }
 
-    // Getters y setters
-
     public String getNombre() {
         return nombre;
     }
@@ -40,7 +38,7 @@ public class Proyecto {
         this.empleadosAsignados = empleadosAsignados;
     }
 
-    public void agregarEmpleado(String empleado) {
-        this.empleadosAsignados.add(empleado);
+    public void agregarEmpleado(String nombreEmpleado) {
+        this.empleadosAsignados.add(nombreEmpleado);
     }
 }
