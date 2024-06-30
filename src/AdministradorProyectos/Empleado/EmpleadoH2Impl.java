@@ -1,10 +1,10 @@
 package AdministradorProyectos.Empleado;
 
 import AdministradorProyectos.Exceptions.DAOException;
+import AdministradorProyectos.Main.TableManager;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class EmpleadoH2Impl implements EmpleadoDAO {
 	private Connection conexion;
@@ -14,22 +14,11 @@ public class EmpleadoH2Impl implements EmpleadoDAO {
 
 	public EmpleadoH2Impl() throws DAOException {
 		try {
+			TableManager tableManager = new TableManager("EMPLEADO");
+			tableManager.crearTablaEmpleado();
 			conexion = DriverManager.getConnection(url, user, password);
-			crearTabla(conexion);
 		} catch (SQLException e) {
 			throw new DAOException("Error al conectar con la base de datos", e);
-		}
-	}
-
-	private void crearTabla(Connection conexion) {
-		String sqlEmpleado = "CREATE TABLE IF NOT EXISTS EMPLEADO " + "(NOMBRE VARCHAR(255) PRIMARY KEY, "
-				+ "COSTO_HORA DOUBLE)";
-
-		try (Statement stmt = conexion.createStatement()) {
-			stmt.execute(sqlEmpleado);
-			System.out.println("Tabla EMPLEADO creada exitosamente.");
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 	}
 

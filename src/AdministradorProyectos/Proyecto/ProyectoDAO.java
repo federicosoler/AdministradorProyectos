@@ -1,15 +1,15 @@
 package AdministradorProyectos.Proyecto;
 
+import AdministradorProyectos.Exceptions.DAOException;
+
 import java.util.List;
 
 public interface ProyectoDAO {
-	void guardarProyecto(Proyecto proyecto);
+	void guardarProyecto(Proyecto proyecto) throws DAOException;
 
-	Proyecto obtenerProyectoPorNombre(String nombre);
+	void actualizarProyecto(Proyecto proyecto) throws DAOException;
 
-	List<Proyecto> obtenerTodosLosProyectos();
+	void eliminarProyecto(String nombre) throws DAOException;
 
-	void actualizarProyecto(Proyecto proyecto);
-
-	void eliminarProyecto(String nombre);
+	List<Proyecto> obtenerTodosLosProyectos() throws DAOException;
 }
