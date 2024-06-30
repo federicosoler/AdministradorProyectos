@@ -1,133 +1,184 @@
 package AdministradorProyectos.Proyecto;
 
 import AdministradorProyectos.Exceptions.DAOException;
-import AdministradorProyectos.Main.TableManager;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProyectoH2Impl implements ProyectoDAO {
-	private Connection conexion;
-	private String url = "jdbc:h2:file:E:/UP/Laboratorio I/Eclipse Workspace/AdministradorProyectos/db/PROYECTO";
-	private String user = "sa";
-	private String password = "";
+    private Connection conexion;
 
-	public ProyectoH2Impl() throws DAOException {
-		try {
-			TableManager tableManager = new TableManager("PROYECTO");
-			tableManager.crearTablaProyecto();
-			tableManager.crearTablaProyectoEmpleado();
-			conexion = DriverManager.getConnection(url, user, password);
-		} catch (SQLException e) {
-			throw new DAOException("Error al conectar con la base de datos", e);
-		}
-	}
+    public ProyectoH2Impl() throws DAOException {
+        try {
+            String url = "jdbc:h2:file:E:/UP/Laboratorio I/Eclipse Workspace/AdministradorProyectos/db/PROYECTO";
+            conexion = DriverManager.getConnection(url, "sa", "");
+            crearTabla();
+        } catch (SQLException e) {
+            throw new DAOException("Error al conectar con la base de datos", e);
+        }
+    }
 
-	@Override
-	public void guardarProyecto(Proyecto proyecto) throws DAOException {
-		String sql = "INSERT INTO PROYECTO (NOMBRE, DESCRIPCION) VALUES (?, ?)";
-		try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
-			stmt.setString(1, proyecto.getNombre());
-			stmt.setString(2, proyecto.getDescripcion());
-			stmt.executeUpdate();
+    private void crearTabla() throws DAOException {
+        try {
+            Statement stmt = conexion.createStatement();
+            String sqlProyecto = "CREATE TABLE IF NOT EXISTS PROYECTO " +
+                    "(NOMBRE VARCHAR(255) PRIMARY KEY, " +
+                    "DESCRIPCION VARCHAR(255))";
+            stmt.executeUpdate(sqlProyecto);
 
-			// Guardar empleados asignados
-			for (String empleado : proyecto.getEmpleadosAsignados()) {
-				asignarEmpleadoAProyecto(proyecto.getNombre(), empleado);
-			}
-		} catch (SQLException e) {
-			throw new DAOException("Error al guardar proyecto", e);
-		}
-	}
+            String sqlProyectoEmpleado = "CREATE TABLE IF NOT EXISTS PROYECTO_EMPLEADO " +
+                    "(PROYECTO_NOMBRE VARCHAR(255), " +
+                    "EMPLEADO_NOMBRE VARCHAR(255), " +
+                    "PRIMARY KEY (PROYECTO_NOMBRE, EMPLEADO_NOMBRE))";
+            stmt.executeUpdate(sqlProyectoEmpleado);
 
-	@Override
-	public void actualizarProyecto(Proyecto proyecto) throws DAOException {
-		String sql = "UPDATE PROYECTO SET DESCRIPCION = ? WHERE NOMBRE = ?";
-		try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
-			stmt.setString(1, proyecto.getDescripcion());
-			stmt.setString(2, proyecto.getNombre());
-			stmt.executeUpdate();
+            System.out.println("Tablas PROYECTO y PROYECTO_EMPLEADO creadas exitosamente.");
+        } catch (SQLException e) {
+            throw new DAOException("Error al crear las tablas", e);
+        }
+    }
 
-			// Actualizar empleados asignados
-			eliminarAsignacionesDeProyecto(proyecto.getNombre());
-			for (String empleado : proyecto.getEmpleadosAsignados()) {
-				asignarEmpleadoAProyecto(proyecto.getNombre(), empleado);
-			}
-		} catch (SQLException e) {
-			throw new DAOException("Error al actualizar proyecto", e);
-		}
-	}
+    @Override
+    public void guardarProyecto(Proyecto proyecto) throws DAOException {
+        try {
+            String sql = "INSERT INTO PROYECTO (NOMBRE, DESCRIPCION) VALUES (?, ?)";
+            PreparedStatement pstmt = conexion.prepareStatement(sql);
+            pstmt.setString(1, proyecto.getNombre());
+            pstmt.setString(2, proyecto.getDescripcion());
+            pstmt.executeUpdate();
 
-	@Override
-	public void eliminarProyecto(String nombre) throws DAOException {
-		String sql = "DELETE FROM PROYECTO WHERE NOMBRE = ?";
-		try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
-			stmt.setString(1, nombre);
-			stmt.executeUpdate();
+            for (String empleado : proyecto.getEmpleadosAsignados()) {
+                String sqlProyectoEmpleado = "INSERT INTO PROYECTO_EMPLEADO (PROYECTO_NOMBRE, EMPLEADO_NOMBRE) VALUES (?, ?)";
+                PreparedStatement pstmtProyectoEmpleado = conexion.prepareStatement(sqlProyectoEmpleado);
+                pstmtProyectoEmpleado.setString(1, proyecto.getNombre());
+                pstmtProyectoEmpleado.setString(2, empleado);
+                pstmtProyectoEmpleado.executeUpdate();
+            }
 
-			// Eliminar asignaciones de empleados
-			eliminarAsignacionesDeProyecto(nombre);
-		} catch (SQLException e) {
-			throw new DAOException("Error al eliminar proyecto", e);
-		}
-	}
+            System.out.println("Proyecto guardado correctamente: " + proyecto.getNombre());
+        } catch (SQLException e) {
+            throw new DAOException("Error al guardar el proyecto", e);
+        }
+    }
 
-	@Override
-	public List<Proyecto> obtenerTodosLosProyectos() throws DAOException {
-		List<Proyecto> proyectos = new ArrayList<>();
-		String sql = "SELECT * FROM PROYECTO";
-		try (PreparedStatement stmt = conexion.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
-			while (rs.next()) {
-				String nombre = rs.getString("NOMBRE");
-				String descripcion = rs.getString("DESCRIPCION");
-				Proyecto proyecto = new Proyecto(nombre, descripcion);
-				proyecto.setEmpleadosAsignados(obtenerEmpleadosDeProyecto(nombre));
-				proyectos.add(proyecto);
-			}
-		} catch (SQLException e) {
-			throw new DAOException("Error al obtener proyectos", e);
-		}
-		return proyectos;
-	}
+    @Override
+    public List<Proyecto> obtenerTodosLosProyectos() throws DAOException {
+        try {
+            String sql = "SELECT * FROM PROYECTO";
+            Statement stmt = conexion.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
 
-	@Override
-	public void asignarEmpleadoAProyecto(String nombreProyecto, String nombreEmpleado) throws DAOException {
-		String sql = "INSERT INTO PROYECTO_EMPLEADO (NOMBRE_PROYECTO, NOMBRE_EMPLEADO) VALUES (?, ?)";
-		try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
-			stmt.setString(1, nombreProyecto);
-			stmt.setString(2, nombreEmpleado);
-			stmt.executeUpdate();
-		} catch (SQLException e) {
-			throw new DAOException("Error al asignar empleado al proyecto", e);
-		}
-	}
+            List<Proyecto> proyectos = new ArrayList<>();
+            while (rs.next()) {
+                Proyecto proyecto = new Proyecto(rs.getString("NOMBRE"), rs.getString("DESCRIPCION"));
+                proyectos.add(proyecto);
+            }
 
-	private List<String> obtenerEmpleadosDeProyecto(String nombreProyecto) throws DAOException {
-		List<String> empleados = new ArrayList<>();
-		String sql = "SELECT NOMBRE_EMPLEADO FROM PROYECTO_EMPLEADO WHERE NOMBRE_PROYECTO = ?";
-		try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
-			stmt.setString(1, nombreProyecto);
-			ResultSet rs = stmt.executeQuery();
-			while (rs.next()) {
-				empleados.add(rs.getString("NOMBRE_EMPLEADO"));
-			}
-		} catch (SQLException e) {
-			throw new DAOException("Error al obtener empleados del proyecto", e);
-		}
-		return empleados;
-	}
+            for (Proyecto proyecto : proyectos) {
+                String sqlEmpleados = "SELECT EMPLEADO_NOMBRE FROM PROYECTO_EMPLEADO WHERE PROYECTO_NOMBRE = ?";
+                PreparedStatement pstmt = conexion.prepareStatement(sqlEmpleados);
+                pstmt.setString(1, proyecto.getNombre());
+                ResultSet rsEmpleados = pstmt.executeQuery();
+                List<String> empleadosAsignados = new ArrayList<>();
+                while (rsEmpleados.next()) {
+                    empleadosAsignados.add(rsEmpleados.getString("EMPLEADO_NOMBRE"));
+                }
+                proyecto.setEmpleadosAsignados(empleadosAsignados);
+            }
 
-	private void eliminarAsignacionesDeProyecto(String nombreProyecto) throws DAOException {
-		String sql = "DELETE FROM PROYECTO_EMPLEADO WHERE NOMBRE_PROYECTO = ?";
-		try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
-			stmt.setString(1, nombreProyecto);
-			stmt.executeUpdate();
-		} catch (SQLException e) {
-			throw new DAOException("Error al eliminar asignaciones del proyecto", e);
-		}
-	}
+            return proyectos;
+        } catch (SQLException e) {
+            throw new DAOException("Error al obtener los proyectos", e);
+        }
+    }
+
+    @Override
+    public Proyecto obtenerProyectoPorNombre(String nombre) throws DAOException {
+        try {
+            String sql = "SELECT * FROM PROYECTO WHERE NOMBRE = ?";
+            PreparedStatement pstmt = conexion.prepareStatement(sql);
+            pstmt.setString(1, nombre);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                Proyecto proyecto = new Proyecto(rs.getString("NOMBRE"), rs.getString("DESCRIPCION"));
+                String sqlEmpleados = "SELECT EMPLEADO_NOMBRE FROM PROYECTO_EMPLEADO WHERE PROYECTO_NOMBRE = ?";
+                PreparedStatement pstmtEmpleados = conexion.prepareStatement(sqlEmpleados);
+                pstmtEmpleados.setString(1, nombre);
+                ResultSet rsEmpleados = pstmtEmpleados.executeQuery();
+                List<String> empleadosAsignados = new ArrayList<>();
+                while (rsEmpleados.next()) {
+                    empleadosAsignados.add(rsEmpleados.getString("EMPLEADO_NOMBRE"));
+                }
+                proyecto.setEmpleadosAsignados(empleadosAsignados);
+                return proyecto;
+            } else {
+                throw new DAOException("Proyecto no encontrado: " + nombre);
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Error al obtener el proyecto por nombre", e);
+        }
+    }
+
+    @Override
+    public void actualizarProyecto(Proyecto proyecto) throws DAOException {
+        try {
+            String sql = "UPDATE PROYECTO SET DESCRIPCION = ? WHERE NOMBRE = ?";
+            PreparedStatement pstmt = conexion.prepareStatement(sql);
+            pstmt.setString(1, proyecto.getDescripcion());
+            pstmt.setString(2, proyecto.getNombre());
+            pstmt.executeUpdate();
+
+            String sqlEliminarEmpleados = "DELETE FROM PROYECTO_EMPLEADO WHERE PROYECTO_NOMBRE = ?";
+            PreparedStatement pstmtEliminarEmpleados = conexion.prepareStatement(sqlEliminarEmpleados);
+            pstmtEliminarEmpleados.setString(1, proyecto.getNombre());
+            pstmtEliminarEmpleados.executeUpdate();
+
+            for (String empleado : proyecto.getEmpleadosAsignados()) {
+                String sqlProyectoEmpleado = "INSERT INTO PROYECTO_EMPLEADO (PROYECTO_NOMBRE, EMPLEADO_NOMBRE) VALUES (?, ?)";
+                PreparedStatement pstmtProyectoEmpleado = conexion.prepareStatement(sqlProyectoEmpleado);
+                pstmtProyectoEmpleado.setString(1, proyecto.getNombre());
+                pstmtProyectoEmpleado.setString(2, empleado);
+                pstmtProyectoEmpleado.executeUpdate();
+            }
+
+            System.out.println("Proyecto actualizado correctamente: " + proyecto.getNombre());
+        } catch (SQLException e) {
+            throw new DAOException("Error al actualizar el proyecto", e);
+        }
+    }
+
+    @Override
+    public void eliminarProyecto(String nombre) throws DAOException {
+        try {
+            String sql = "DELETE FROM PROYECTO WHERE NOMBRE = ?";
+            PreparedStatement pstmt = conexion.prepareStatement(sql);
+            pstmt.setString(1, nombre);
+            pstmt.executeUpdate();
+
+            String sqlEliminarEmpleados = "DELETE FROM PROYECTO_EMPLEADO WHERE PROYECTO_NOMBRE = ?";
+            PreparedStatement pstmtEliminarEmpleados = conexion.prepareStatement(sqlEliminarEmpleados);
+            pstmtEliminarEmpleados.setString(1, nombre);
+            pstmtEliminarEmpleados.executeUpdate();
+
+            System.out.println("Proyecto eliminado correctamente: " + nombre);
+        } catch (SQLException e) {
+            throw new DAOException("Error al eliminar el proyecto", e);
+        }
+    }
+
+    @Override
+    public void asignarEmpleadoAProyecto(String nombreProyecto, String nombreEmpleado) throws DAOException {
+        try {
+            String sql = "INSERT INTO PROYECTO_EMPLEADO (PROYECTO_NOMBRE, EMPLEADO_NOMBRE) VALUES (?, ?)";
+            PreparedStatement pstmt = conexion.prepareStatement(sql);
+            pstmt.setString(1, nombreProyecto);
+            pstmt.setString(2, nombreEmpleado);
+            pstmt.executeUpdate();
+            System.out.println("Empleado " + nombreEmpleado + " asignado al proyecto " + nombreProyecto);
+        } catch (SQLException e) {
+            throw new DAOException("Error al asignar empleado al proyecto", e);
+        }
+    }
 }

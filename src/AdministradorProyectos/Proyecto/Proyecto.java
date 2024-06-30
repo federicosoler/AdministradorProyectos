@@ -1,48 +1,46 @@
 package AdministradorProyectos.Proyecto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Proyecto {
-	private String nombre;
-	private String descripcion;
-	private List<String> empleadosAsignados;
-	private List<String> tareas;
+    private String nombre;
+    private String descripcion;
+    private List<String> empleadosAsignados;
 
-	public Proyecto(String nombre, String descripcion) {
-		this.nombre = nombre;
-		this.descripcion = descripcion;
-	}
+    public Proyecto(String nombre, String descripcion) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.empleadosAsignados = new ArrayList<>();
+    }
 
-	// Getters y Setters
-	public String getNombre() {
-		return nombre;
-	}
+    // Getters y setters
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
+    public String getNombre() {
+        return nombre;
+    }
 
-	public String getDescripcion() {
-		return descripcion;
-	}
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+    public String getDescripcion() {
+        return descripcion;
+    }
 
-	public List<String> getEmpleadosAsignados() {
-		return empleadosAsignados;
-	}
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
-	public void setEmpleadosAsignados(List<String> empleadosAsignados) {
-		this.empleadosAsignados = empleadosAsignados;
-	}
+    public List<String> getEmpleadosAsignados() {
+        return empleadosAsignados;
+    }
 
-	public List<String> getTareas() {
-		return tareas;
-	}
+    public void setEmpleadosAsignados(List<String> empleadosAsignados) {
+        this.empleadosAsignados = empleadosAsignados;
+    }
 
-	public void setTareas(List<String> tareas) {
-		this.tareas = tareas;
-	}
+    public void agregarEmpleado(String empleado) {
+        this.empleadosAsignados.add(empleado);
+    }
 }
