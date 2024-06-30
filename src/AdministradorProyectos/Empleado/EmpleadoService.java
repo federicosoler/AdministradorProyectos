@@ -12,7 +12,7 @@ public class EmpleadoService {
 		this.empleadoDAO = empleadoDAO;
 	}
 
-	public void agregarEmpleado(Empleado empleado) throws ServiceException {
+	public void guardarEmpleado(Empleado empleado) throws ServiceException {
 		try {
 			empleadoDAO.guardarEmpleado(empleado);
 		} catch (DAOException e) {

@@ -96,7 +96,7 @@ public class EmpleadoUI extends JFrame {
 			String nombre = nombreField.getText();
 			double costoHora = Double.parseDouble(costoHoraField.getText());
 			Empleado nuevoEmpleado = new Empleado(nombre, costoHora);
-			empleadoService.agregarEmpleado(nuevoEmpleado);
+			empleadoService.guardarEmpleado(nuevoEmpleado);
 			cargarEmpleados();
 			JOptionPane.showMessageDialog(this, "Empleado agregado correctamente.");
 		} catch (NumberFormatException ex) {
@@ -115,7 +115,7 @@ public class EmpleadoUI extends JFrame {
 				double costoHora = Double.parseDouble(costoHoraField.getText());
 				empleadoService.eliminarEmpleado(nombreAntiguo);
 				Empleado empleado = new Empleado(nombreNuevo, costoHora);
-				empleadoService.agregarEmpleado(empleado);
+				empleadoService.guardarEmpleado(empleado);
 				cargarEmpleados();
 				JOptionPane.showMessageDialog(this, "Empleado actualizado correctamente.");
 			} catch (NumberFormatException ex) {
