@@ -7,20 +7,21 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProyectoH2Impl implements ProyectoDAO {
 	private Connection conexion;
+	private String url = "jdbc:h2:file:E:/UP/Laboratorio I/Eclipse Workspace/AdministradorProyectos/db/PROYECTO";
+	private String user = "sa";
+	private String password = "";
 
 	public ProyectoH2Impl() throws DAOException {
 		try {
 			TableManager tableManager = new TableManager("PROYECTO");
 			tableManager.crearTablaProyecto();
 			tableManager.crearTablaProyectoEmpleado();
-			String url = "jdbc:h2:file:E:/UP/Laboratorio I/Eclipse Workspace/AdministradorProyectos/db/PROYECTO";
-			conexion = DriverManager.getConnection(url, "sa", "");
+			conexion = DriverManager.getConnection(url, user, password);
 		} catch (SQLException e) {
 			throw new DAOException("Error al conectar con la base de datos", e);
 		}

@@ -10,7 +10,9 @@ public class TableManager {
 
 	public TableManager(String dbName) throws SQLException {
 		String url = "jdbc:h2:file:E:/UP/Laboratorio I/Eclipse Workspace/AdministradorProyectos/db/" + dbName;
-		conexion = DriverManager.getConnection(url, "sa", "");
+		String user = "sa";
+		String password = "";
+		conexion = DriverManager.getConnection(url, user, password);
 	}
 
 	public void crearTablaEmpleado() throws SQLException {
