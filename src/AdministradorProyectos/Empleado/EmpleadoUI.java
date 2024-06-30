@@ -26,7 +26,7 @@ public class EmpleadoUI extends JFrame {
 
 		tableModel = new DefaultTableModel(new String[] { "Nombre", "Costo por hora" }, 0);
 		table = new JTable(tableModel);
-		cargarEmpleados();
+		obtenerTodosLosEmpleados();
 
 		JScrollPane scrollPane = new JScrollPane(table);
 		add(scrollPane, BorderLayout.CENTER);
@@ -46,7 +46,7 @@ public class EmpleadoUI extends JFrame {
 		addButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				agregarEmpleado();
+				guardarEmpleado();
 			}
 		});
 		panel.add(addButton);
@@ -78,8 +78,23 @@ public class EmpleadoUI extends JFrame {
 			}
 		});
 	}
+	
+	private void guardarEmpleado() {
+		try {
+			String nombre = nombreField.getText();
+			double costoHora = Double.parseDouble(costoHoraField.getText());
+			Empleado nuevoEmpleado = new Empleado(nombre, costoHora);
+			empleadoService.guardarEmpleado(nuevoEmpleado);
+			obtenerTodosLosEmpleados();
+			JOptionPane.showMessageDialog(this, "Empleado agregado correctamente.");
+		} catch (NumberFormatException ex) {
+			JOptionPane.showMessageDialog(this, "Formato de costo por hora inválido.");
+		} catch (ServiceException ex) {
+			JOptionPane.showMessageDialog(this, "Error al agregar empleado: " + ex.getMessage());
+		}
+	}
 
-	private void cargarEmpleados() {
+	private void obtenerTodosLosEmpleados() {
 		try {
 			List<Empleado> empleados = empleadoService.obtenerTodosLosEmpleados();
 			tableModel.setRowCount(0);
@@ -88,21 +103,6 @@ public class EmpleadoUI extends JFrame {
 			}
 		} catch (ServiceException e) {
 			JOptionPane.showMessageDialog(this, "Error al cargar empleados: " + e.getMessage());
-		}
-	}
-
-	private void agregarEmpleado() {
-		try {
-			String nombre = nombreField.getText();
-			double costoHora = Double.parseDouble(costoHoraField.getText());
-			Empleado nuevoEmpleado = new Empleado(nombre, costoHora);
-			empleadoService.guardarEmpleado(nuevoEmpleado);
-			cargarEmpleados();
-			JOptionPane.showMessageDialog(this, "Empleado agregado correctamente.");
-		} catch (NumberFormatException ex) {
-			JOptionPane.showMessageDialog(this, "Formato de costo por hora inválido.");
-		} catch (ServiceException ex) {
-			JOptionPane.showMessageDialog(this, "Error al agregar empleado: " + ex.getMessage());
 		}
 	}
 
@@ -116,7 +116,7 @@ public class EmpleadoUI extends JFrame {
 				empleadoService.eliminarEmpleado(nombreAntiguo);
 				Empleado empleado = new Empleado(nombreNuevo, costoHora);
 				empleadoService.guardarEmpleado(empleado);
-				cargarEmpleados();
+				obtenerTodosLosEmpleados();
 				JOptionPane.showMessageDialog(this, "Empleado actualizado correctamente.");
 			} catch (NumberFormatException ex) {
 				JOptionPane.showMessageDialog(this, "Formato de costo por hora inválido.");
@@ -134,7 +134,7 @@ public class EmpleadoUI extends JFrame {
 			try {
 				String nombre = (String) tableModel.getValueAt(selectedRow, 0);
 				empleadoService.eliminarEmpleado(nombre);
-				cargarEmpleados();
+				obtenerTodosLosEmpleados();
 				JOptionPane.showMessageDialog(this, "Empleado eliminado correctamente.");
 			} catch (ServiceException ex) {
 				JOptionPane.showMessageDialog(this, "Error al eliminar empleado: " + ex.getMessage());
