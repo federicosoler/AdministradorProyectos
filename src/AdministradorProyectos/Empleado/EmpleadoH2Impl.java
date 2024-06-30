@@ -46,22 +46,6 @@ public class EmpleadoH2Impl implements EmpleadoDAO {
 	}
 
 	@Override
-	public Empleado obtenerEmpleadoPorNombre(String nombre) throws DAOException {
-		Empleado empleado = null;
-		String sql = "SELECT * FROM EMPLEADO WHERE NOMBRE = ?";
-		try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
-			stmt.setString(1, nombre);
-			ResultSet rs = stmt.executeQuery();
-			if (rs.next()) {
-				empleado = new Empleado(rs.getString("NOMBRE"), rs.getDouble("COSTO_HORA"));
-			}
-		} catch (SQLException e) {
-			throw new DAOException("Error al obtener empleado por nombre", e);
-		}
-		return empleado;
-	}
-
-	@Override
 	public List<Empleado> obtenerTodosLosEmpleados() throws DAOException {
 		List<Empleado> empleados = new ArrayList<>();
 		String sql = "SELECT * FROM EMPLEADO";

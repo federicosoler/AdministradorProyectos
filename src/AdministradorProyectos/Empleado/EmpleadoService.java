@@ -20,14 +20,6 @@ public class EmpleadoService {
 		}
 	}
 
-	public Empleado obtenerEmpleadoPorNombre(String nombre) throws ServiceException {
-		try {
-			return empleadoDAO.obtenerEmpleadoPorNombre(nombre);
-		} catch (DAOException e) {
-			throw new ServiceException("Error al obterner empleado por nombre", e);
-		}
-	}
-
 	public List<Empleado> obtenerTodosLosEmpleados() throws ServiceException {
 		try {
 			return empleadoDAO.obtenerTodosLosEmpleados();
