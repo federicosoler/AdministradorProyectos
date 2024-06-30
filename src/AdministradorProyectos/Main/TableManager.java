@@ -10,9 +10,7 @@ public class TableManager {
 
 	public TableManager(String dbName) throws SQLException {
 		String url = "jdbc:h2:file:E:/UP/Laboratorio I/Eclipse Workspace/AdministradorProyectos/db/" + dbName;
-		String user = "sa";
-		String password = "";
-		conexion = DriverManager.getConnection(url, user, password);
+		conexion = DriverManager.getConnection(url, "sa", "");
 	}
 
 	public void crearTablaEmpleado() throws SQLException {
@@ -33,4 +31,14 @@ public class TableManager {
 		}
 	}
 
+	public void crearTablaProyectoEmpleado() throws SQLException {
+		String sqlProyectoEmpleado = "CREATE TABLE IF NOT EXISTS PROYECTO_EMPLEADO " + "(NOMBRE_PROYECTO VARCHAR(255), "
+				+ "NOMBRE_EMPLEADO VARCHAR(255), " + "PRIMARY KEY (NOMBRE_PROYECTO, NOMBRE_EMPLEADO), "
+				+ "FOREIGN KEY (NOMBRE_PROYECTO) REFERENCES PROYECTO(NOMBRE), "
+				+ "FOREIGN KEY (NOMBRE_EMPLEADO) REFERENCES EMPLEADO(NOMBRE))";
+		try (Statement stmt = conexion.createStatement()) {
+			stmt.execute(sqlProyectoEmpleado);
+			System.out.println("Tabla PROYECTO_EMPLEADO creada exitosamente.");
+		}
+	}
 }

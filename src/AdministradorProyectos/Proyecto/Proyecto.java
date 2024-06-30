@@ -5,7 +5,7 @@ import java.util.List;
 public class Proyecto {
 	private String nombre;
 	private String descripcion;
-	private List<String> empleados;
+	private List<String> empleadosAsignados;
 	private List<String> tareas;
 
 	public Proyecto(String nombre, String descripcion) {
@@ -30,12 +30,12 @@ public class Proyecto {
 		this.descripcion = descripcion;
 	}
 
-	public List<String> getEmpleados() {
-		return empleados;
+	public List<String> getEmpleadosAsignados() {
+		return empleadosAsignados;
 	}
 
-	public void setEmpleados(List<String> empleados) {
-		this.empleados = empleados;
+	public void setEmpleadosAsignados(List<String> empleadosAsignados) {
+		this.empleadosAsignados = empleadosAsignados;
 	}
 
 	public List<String> getTareas() {
