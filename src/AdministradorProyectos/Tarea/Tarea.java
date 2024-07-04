@@ -1,27 +1,21 @@
 package AdministradorProyectos.Tarea;
 
-import AdministradorProyectos.Empleado.Empleado;
-import AdministradorProyectos.Proyecto.Proyecto;
-
 public class Tarea {
 	private String titulo;
 	private String descripcion;
 	private int estimacionHoras;
 	private int horasReales;
-	private String estado;
-	private Empleado responsable;
-	private Proyecto proyecto;
+	private String empleadoAsignado;
 
-	public Tarea(String titulo, String descripcion, int estimacionHoras, Proyecto proyecto, Empleado responsable) {
+	public Tarea(String titulo, String descripcion, int estimacionHoras, int horasReales, String empleadoAsignado) {
 		this.titulo = titulo;
 		this.descripcion = descripcion;
 		this.estimacionHoras = estimacionHoras;
-		this.horasReales = 0;
-		this.estado = "Pendiente";
-		this.proyecto = proyecto;
-		this.responsable = responsable;
+		this.horasReales = horasReales;
+		this.empleadoAsignado = empleadoAsignado;
 	}
 
+	// Getters y Setters
 	public String getTitulo() {
 		return titulo;
 	}
@@ -54,27 +48,11 @@ public class Tarea {
 		this.horasReales = horasReales;
 	}
 
-	public String getEstado() {
-		return estado;
+	public String getEmpleadoAsignado() {
+		return empleadoAsignado;
 	}
 
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-
-	public Empleado getResponsable() {
-		return responsable;
-	}
-
-	public void setResponsable(Empleado responsable) {
-		this.responsable = responsable;
-	}
-
-	public Proyecto getProyecto() {
-		return proyecto;
-	}
-
-	public void setProyecto(Proyecto proyecto) {
-		this.proyecto = proyecto;
+	public void setEmpleadoAsignado(String empleadoAsignado) {
+		this.empleadoAsignado = empleadoAsignado;
 	}
 }
