@@ -1,7 +1,8 @@
 package AdministradorProyectos.Proyecto;
 
-import AdministradorProyectos.Exceptions.ServiceException;
+import AdministradorProyectos.Empleado.Empleado;
 import AdministradorProyectos.Exceptions.DAOException;
+import AdministradorProyectos.Exceptions.ServiceException;
 
 import java.util.List;
 
@@ -20,6 +21,14 @@ public class ProyectoService {
         }
     }
 
+    public Proyecto obtenerProyectoPorNombre(String nombre) throws ServiceException {
+        try {
+            return proyectoDAO.obtenerProyectoPorNombre(nombre);
+        } catch (DAOException e) {
+            throw new ServiceException("Error al obtener el proyecto", e);
+        }
+    }
+
     public List<Proyecto> obtenerTodosLosProyectos() throws ServiceException {
         try {
             return proyectoDAO.obtenerTodosLosProyectos();
@@ -33,6 +42,22 @@ public class ProyectoService {
             proyectoDAO.eliminarProyecto(nombre);
         } catch (DAOException e) {
             throw new ServiceException("Error al eliminar el proyecto", e);
+        }
+    }
+
+    public void actualizarProyecto(Proyecto proyecto) throws ServiceException {
+        try {
+            proyectoDAO.actualizarProyecto(proyecto);
+        } catch (DAOException e) {
+            throw new ServiceException("Error al actualizar el proyecto", e);
+        }
+    }
+
+    public void asignarEmpleadoAProyecto(String proyectoNombre, Empleado empleado) throws ServiceException {
+        try {
+            proyectoDAO.asignarEmpleadoAProyecto(proyectoNombre, empleado);
+        } catch (DAOException e) {
+            throw new ServiceException("Error al asignar el empleado al proyecto", e);
         }
     }
 }
