@@ -21,14 +21,6 @@ public class ProyectoService {
         }
     }
 
-    public Proyecto obtenerProyectoPorNombre(String nombre) throws ServiceException {
-        try {
-            return proyectoDAO.obtenerProyectoPorNombre(nombre);
-        } catch (DAOException e) {
-            throw new ServiceException("Error al obtener el proyecto", e);
-        }
-    }
-
     public List<Proyecto> obtenerTodosLosProyectos() throws ServiceException {
         try {
             return proyectoDAO.obtenerTodosLosProyectos();
@@ -53,7 +45,7 @@ public class ProyectoService {
         }
     }
 
-    public void asignarEmpleadoAProyecto(String proyectoNombre, Empleado empleado) throws ServiceException {
+    public void asignarEmpleadoAProyecto(String proyectoNombre, String empleado) throws ServiceException {
         try {
             proyectoDAO.asignarEmpleadoAProyecto(proyectoNombre, empleado);
         } catch (DAOException e) {
