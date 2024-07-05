@@ -1,6 +1,8 @@
 package AdministradorProyectos.Proyecto;
 
 import AdministradorProyectos.Exceptions.DAOException;
+import AdministradorProyectos.Main.DBManager;
+import AdministradorProyectos.Main.TableManager;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,25 +12,7 @@ public class ProyectoH2Impl implements ProyectoDAO {
     private Connection conexion;
 
     public ProyectoH2Impl() throws DAOException {
-        try {
-            String url = "jdbc:h2:file:E:/UP/Laboratorio I/Eclipse Workspace/AdministradorProyectos/db/ProyectoDB";
-            conexion = DriverManager.getConnection(url, "sa", "");
-            crearTablas();
-        } catch (SQLException e) {
-            throw new DAOException("Error al conectar con la base de datos", e);
-        }
-    }
-
-    private void crearTablas() throws DAOException {
-        try (Statement stmt = conexion.createStatement()) {
-            String sqlProyecto = "CREATE TABLE IF NOT EXISTS PROYECTO (NOMBRE VARCHAR(255) PRIMARY KEY, DESCRIPCION VARCHAR(255))";
-            String sqlProyectoEmpleado = "CREATE TABLE IF NOT EXISTS PROYECTO_EMPLEADO (PROYECTO_NOMBRE VARCHAR(255), EMPLEADO_NOMBRE VARCHAR(255), PRIMARY KEY(PROYECTO_NOMBRE, EMPLEADO_NOMBRE))";
-            stmt.execute(sqlProyecto);
-            stmt.execute(sqlProyectoEmpleado);
-            System.out.println("Tablas PROYECTO y PROYECTO_EMPLEADO creadas exitosamente.");
-        } catch (SQLException e) {
-            throw new DAOException("Error al crear las tablas", e);
-        }
+        this.conexion = DBManager.getConnection();
     }
 
     @Override

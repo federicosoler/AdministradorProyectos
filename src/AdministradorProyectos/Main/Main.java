@@ -14,7 +14,8 @@ import AdministradorProyectos.Tarea.TareaH2Impl;
 import AdministradorProyectos.Tarea.TareaService;
 import AdministradorProyectos.Tarea.TareaUI;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 public class Main {
     public static void main(String[] args) {

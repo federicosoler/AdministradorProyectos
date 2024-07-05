@@ -1,6 +1,8 @@
 package AdministradorProyectos.Tarea;
 
 import AdministradorProyectos.Exceptions.DAOException;
+import AdministradorProyectos.Main.DBManager;
+import AdministradorProyectos.Main.TableManager;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,26 +11,10 @@ import java.util.List;
 public class TareaH2Impl implements TareaDAO {
 	private Connection conexion;
 
-	public TareaH2Impl() throws DAOException {
-		try {
-			String url = "jdbc:h2:file:E:/UP/Laboratorio I/Eclipse Workspace/AdministradorProyectos/db/TareaDB";
-			conexion = DriverManager.getConnection(url, "sa", "");
-			crearTabla();
-		} catch (SQLException e) {
-			throw new DAOException("Error al conectar con la base de datos", e);
-		}
-	}
-
-	private void crearTabla() throws DAOException {
-		try (Statement stmt = conexion.createStatement()) {
-			String sqlTarea = "CREATE TABLE IF NOT EXISTS TAREA (TITULO VARCHAR(255) PRIMARY KEY, DESCRIPCION VARCHAR(255), ESTIMACION_HORAS INT, HORAS_REALES INT, EMPLEADO_ASIGNADO VARCHAR(255))";
-			stmt.execute(sqlTarea);
-			System.out.println("Tabla TAREA creada exitosamente.");
-		} catch (SQLException e) {
-			throw new DAOException("Error al crear la tabla TAREA", e);
-		}
-	}
-
+    public TareaH2Impl() throws DAOException {
+        this.conexion = DBManager.getConnection();
+    }
+    
 	@Override
 	public void guardarTarea(Tarea tarea) throws DAOException {
 		try (PreparedStatement stmt = conexion.prepareStatement(
