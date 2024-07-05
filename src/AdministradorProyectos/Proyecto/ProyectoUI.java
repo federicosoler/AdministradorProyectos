@@ -26,7 +26,7 @@ public class ProyectoUI extends JFrame {
 
         setTitle("Gestión de Proyectos");
         setSize(800, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
         tableModel = new DefaultTableModel(new String[]{"Nombre", "Descripción", "Empleados Asignados"}, 0);

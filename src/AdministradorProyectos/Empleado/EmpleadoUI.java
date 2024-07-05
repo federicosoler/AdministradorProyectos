@@ -21,7 +21,7 @@ public class EmpleadoUI extends JFrame {
 		this.empleadoService = empleadoService;
 		setTitle("Gestión de Empleados");
 		setSize(600, 400);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLayout(new BorderLayout());
 
 		tableModel = new DefaultTableModel(new String[] { "Nombre", "Costo por hora" }, 0);
