@@ -35,6 +35,14 @@ public class EmpleadoService {
             throw new ServiceException("Error al eliminar empleado", e);
         }
     }
+    
+    public Empleado obtenerEmpleadoPorNombre(String nombre) throws ServiceException {
+        try {
+            return empleadoDAO.obtenerEmpleadoPorNombre(nombre);
+        } catch (DAOException e) {
+            throw new ServiceException("Error al obtener el empleado por nombre", e);
+        }
+    }
 
     public List<Empleado> obtenerTodosLosEmpleados() throws ServiceException {
         try {

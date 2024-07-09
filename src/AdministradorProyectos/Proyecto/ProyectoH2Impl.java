@@ -1,8 +1,8 @@
 package AdministradorProyectos.Proyecto;
 
+import AdministradorProyectos.Empleado.Empleado;
 import AdministradorProyectos.Exceptions.DAOException;
 import AdministradorProyectos.Main.DBManager;
-import AdministradorProyectos.Main.TableManager;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -21,21 +21,22 @@ public class ProyectoH2Impl implements ProyectoDAO {
             stmt.setString(1, proyecto.getNombre());
             stmt.setString(2, proyecto.getDescripcion());
             stmt.executeUpdate();
-            for (String empleado : proyecto.getEmpleadosAsignados()) {
-                asignarEmpleadoAProyecto(proyecto.getNombre(), empleado);
+            for (Empleado empleado : proyecto.getEmpleadosAsignados()) {
+                asignarEmpleadoAProyecto(proyecto.getNombre(), empleado.getNombre());
             }
         } catch (SQLException e) {
             throw new DAOException("Error al guardar el proyecto", e);
         }
     }
 
+    
     @Override
     public List<Proyecto> obtenerTodosLosProyectos() throws DAOException {
         List<Proyecto> proyectos = new ArrayList<>();
         try (Statement stmt = conexion.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT * FROM PROYECTO")) {
             while (rs.next()) {
-                Proyecto proyecto = new Proyecto(rs.getString("NOMBRE"), rs.getString("DESCRIPCION"));
+                Proyecto proyecto = new Proyecto(rs.getString("NOMBRE"), rs.getString("DESCRIPCION"), obtenerEmpleadosAsignados(rs.getString("NOMBRE")));
                 proyecto.setEmpleadosAsignados(obtenerEmpleadosAsignados(rs.getString("NOMBRE")));
                 proyectos.add(proyecto);
             }
@@ -45,19 +46,36 @@ public class ProyectoH2Impl implements ProyectoDAO {
         return proyectos;
     }
 
-    private List<String> obtenerEmpleadosAsignados(String nombreProyecto) throws DAOException {
-        List<String> empleados = new ArrayList<>();
+    private List<Empleado> obtenerEmpleadosAsignados(String nombreProyecto) throws DAOException {
+        List<Empleado> empleados = new ArrayList<>();
         try (PreparedStatement stmt = conexion.prepareStatement("SELECT EMPLEADO_NOMBRE FROM PROYECTO_EMPLEADO WHERE PROYECTO_NOMBRE = ?")) {
             stmt.setString(1, nombreProyecto);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    empleados.add(rs.getString("EMPLEADO_NOMBRE"));
+                    Empleado empleado = new Empleado(rs.getString("EMPLEADO_NOMBRE"), 0); // Se asume que el costoHora no es relevante aquí
+                    empleados.add(empleado);
                 }
             }
         } catch (SQLException e) {
             throw new DAOException("Error al obtener los empleados asignados al proyecto", e);
         }
         return empleados;
+    }
+    
+    @Override
+    public Proyecto obtenerProyectoPorNombre(String nombre) throws DAOException {
+        Proyecto proyecto = null;
+        try (PreparedStatement stmt = conexion.prepareStatement("SELECT * FROM PROYECTO WHERE NOMBRE = ?")) {
+            stmt.setString(1, nombre);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    proyecto = new Proyecto(rs.getString("NOMBRE"), rs.getString("DESCRIPCION"), obtenerEmpleadosAsignados(nombre));
+                }
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Error al obtener el proyecto por nombre", e);
+        }
+        return proyecto;
     }
 
     @Override
@@ -102,4 +120,17 @@ public class ProyectoH2Impl implements ProyectoDAO {
             throw new DAOException("Error al asignar empleado al proyecto", e);
         }
     }
+    
+    @Override
+    public void desasignarEmpleadoDeProyecto(String nombreProyecto, String nombreEmpleado) throws DAOException {
+        try (PreparedStatement stmt = conexion.prepareStatement(
+                "DELETE FROM PROYECTO_EMPLEADO WHERE PROYECTO_NOMBRE = ? AND EMPLEADO_NOMBRE = ?")) {
+            stmt.setString(1, nombreProyecto);
+            stmt.setString(2, nombreEmpleado);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("Error al desasignar empleado del proyecto", e);
+        }
+    }
+
 }

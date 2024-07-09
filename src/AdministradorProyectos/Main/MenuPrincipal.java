@@ -9,8 +9,7 @@ import AdministradorProyectos.Tarea.TareaService;
 import AdministradorProyectos.Tarea.TareaUI;
 
 import javax.swing.*;
-
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -25,10 +24,10 @@ public class MenuPrincipal extends JFrame {
         this.tareaService = tareaService;
 
         setTitle("Menú Principal");
-        setSize(300, 200);
+        setSize(400, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new FlowLayout());
-        
+
         JButton gestionEmpleadosButton = new JButton("Gestión de Empleados");
         gestionEmpleadosButton.addActionListener(new ActionListener() {
             @Override
@@ -42,7 +41,7 @@ public class MenuPrincipal extends JFrame {
         gestionProyectosButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProyectoUI proyectoUI = new ProyectoUI(proyectoService, empleadoService);
+                ProyectoUI proyectoUI = new ProyectoUI(proyectoService, empleadoService, tareaService);
                 proyectoUI.setVisible(true);
             }
         });

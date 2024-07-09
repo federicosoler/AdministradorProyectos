@@ -1,18 +1,20 @@
 package AdministradorProyectos.Proyecto;
 
-import java.util.ArrayList;
 import java.util.List;
+import AdministradorProyectos.Empleado.Empleado;
 
 public class Proyecto {
     private String nombre;
     private String descripcion;
-    private List<String> empleadosAsignados;
+    private List<Empleado> empleadosAsignados;
 
-    public Proyecto(String nombre, String descripcion) {
+    public Proyecto(String nombre, String descripcion, List<Empleado> empleadosAsignados) {
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.empleadosAsignados = new ArrayList<>();
+        this.empleadosAsignados = empleadosAsignados;
     }
+
+    // Getters y Setters
 
     public String getNombre() {
         return nombre;
@@ -30,15 +32,11 @@ public class Proyecto {
         this.descripcion = descripcion;
     }
 
-    public List<String> getEmpleadosAsignados() {
+    public List<Empleado> getEmpleadosAsignados() {
         return empleadosAsignados;
     }
 
-    public void setEmpleadosAsignados(List<String> empleadosAsignados) {
+    public void setEmpleadosAsignados(List<Empleado> empleadosAsignados) {
         this.empleadosAsignados = empleadosAsignados;
-    }
-
-    public void agregarEmpleado(String nombreEmpleado) {
-        this.empleadosAsignados.add(nombreEmpleado);
     }
 }

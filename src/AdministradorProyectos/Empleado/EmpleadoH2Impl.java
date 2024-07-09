@@ -25,6 +25,22 @@ public class EmpleadoH2Impl implements EmpleadoDAO {
             throw new DAOException("Error al guardar el empleado", e);
         }
     }
+    
+    @Override
+    public Empleado obtenerEmpleadoPorNombre(String nombre) throws DAOException {
+        Empleado empleado = null;
+        try (PreparedStatement stmt = conexion.prepareStatement("SELECT * FROM EMPLEADO WHERE NOMBRE = ?")) {
+            stmt.setString(1, nombre);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    empleado = new Empleado(rs.getString("NOMBRE"), rs.getDouble("COSTO_HORA"));
+                }
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Error al obtener el empleado por nombre", e);
+        }
+        return empleado;
+    }
 
     @Override
     public List<Empleado> obtenerTodosLosEmpleados() throws DAOException {
