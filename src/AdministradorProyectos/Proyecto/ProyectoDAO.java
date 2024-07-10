@@ -19,4 +19,8 @@ public interface ProyectoDAO {
 
 	void desasignarEmpleadoDeProyecto(String nombreProyecto, String nombreEmpleado) throws DAOException;
 
+	void asignarTareaAProyecto(String nombreProyecto, String tituloTarea) throws DAOException;
+
+	void desasignarTareaDeProyecto(String nombreProyecto, String tituloTarea) throws DAOException;
+
 }
