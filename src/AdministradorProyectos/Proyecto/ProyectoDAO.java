@@ -12,11 +12,11 @@ public interface ProyectoDAO {
 	Proyecto obtenerProyectoPorNombre(String nombre) throws DAOException;
 
 	List<Proyecto> obtenerTodosLosProyectos() throws DAOException;
-	
+
 	void actualizarProyecto(Proyecto proyecto) throws DAOException;
 
 	void asignarEmpleadoAProyecto(String nombreProyecto, String nombreEmpleado) throws DAOException;
-	
+
 	void desasignarEmpleadoDeProyecto(String nombreProyecto, String nombreEmpleado) throws DAOException;
 
 }

@@ -3,14 +3,14 @@ package AdministradorProyectos.Tarea;
 public class Tarea {
 	private String titulo;
 	private String descripcion;
-	private int estimacionHoras;
-	private int horasReales;
+	private double horasEstimadas;
+	private double horasReales;
 	private String empleadoAsignado;
 
-	public Tarea(String titulo, String descripcion, int estimacionHoras, int horasReales, String empleadoAsignado) {
+	public Tarea(String titulo, String descripcion, double horasEstimadas, double horasReales, String empleadoAsignado) {
 		this.titulo = titulo;
 		this.descripcion = descripcion;
-		this.estimacionHoras = estimacionHoras;
+		this.horasEstimadas = horasEstimadas;
 		this.horasReales = horasReales;
 		this.empleadoAsignado = empleadoAsignado;
 	}
@@ -32,19 +32,19 @@ public class Tarea {
 		this.descripcion = descripcion;
 	}
 
-	public int getEstimacionHoras() {
-		return estimacionHoras;
+	public double getHorasEstimadas() {
+		return horasEstimadas;
 	}
 
-	public void setEstimacionHoras(int estimacionHoras) {
-		this.estimacionHoras = estimacionHoras;
+	public void setHorasEstimadas(double horasEstimadas) {
+		this.horasEstimadas = horasEstimadas;
 	}
 
-	public int getHorasReales() {
+	public double getHorasReales() {
 		return horasReales;
 	}
 
-	public void setHorasReales(int horasReales) {
+	public void setHorasReales(double horasReales) {
 		this.horasReales = horasReales;
 	}
 

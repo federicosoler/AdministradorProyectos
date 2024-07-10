@@ -27,6 +27,14 @@ public class TareaService {
 			throw new ServiceException("Error al obtener las tareas", e);
 		}
 	}
+	
+    public Tarea obtenerTareaPorTitulo(String titulo) throws ServiceException {
+        try {
+            return tareaDAO.obtenerTareaPorTitulo(titulo);
+        } catch (DAOException e) {
+            throw new ServiceException("Error al obtener la tarea por título", e);
+        }
+    }
 
 	public void actualizarTarea(Tarea tarea) throws ServiceException {
 		try {
