@@ -8,16 +8,15 @@ public class Proyecto {
     private String nombre;
     private String descripcion;
     private List<Empleado> empleadosAsignados;
-    private List<Tarea> tareasAsignadas;  // Añadir esta línea
+    private List<Tarea> tareasAsignadas;
 
+    // Constructor, getters y setters
     public Proyecto(String nombre, String descripcion, List<Empleado> empleadosAsignados, List<Tarea> tareasAsignadas) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.empleadosAsignados = empleadosAsignados;
-        this.tareasAsignadas = tareasAsignadas;  // Añadir esta línea
+        this.tareasAsignadas = tareasAsignadas;
     }
-
-    // Getters y setters
 
     public String getNombre() {
         return nombre;
@@ -50,4 +49,25 @@ public class Proyecto {
     public void setTareasAsignadas(List<Tarea> tareasAsignadas) {
         this.tareasAsignadas = tareasAsignadas;
     }
+
+    public double calcularCostoHoras() {
+        double totalHoras = 0;
+        for (Tarea tarea : tareasAsignadas) {
+            totalHoras += tarea.getHorasReales();
+        }
+        return totalHoras;
+    }
+
+    public double calcularCostoDinero() {
+        double totalDinero = 0;
+        for (Tarea tarea : tareasAsignadas) {
+            for (Empleado empleado : empleadosAsignados) {
+                if (tarea.getEmpleadoAsignado() != null && tarea.getEmpleadoAsignado().equals(empleado.getNombre())) {
+                    totalDinero += tarea.getHorasReales() * empleado.getCostoHora();
+                }
+            }
+        }
+        return totalDinero;
+    }
 }
+

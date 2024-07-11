@@ -49,7 +49,7 @@ public class ProyectoH2Impl implements ProyectoDAO {
         return proyectos;
     }
 
-    private List<Empleado> obtenerEmpleadosAsignados(String nombreProyecto) throws DAOException {
+    public List<Empleado> obtenerEmpleadosAsignados(String nombreProyecto) throws DAOException {
         List<Empleado> empleados = new ArrayList<>();
         try (PreparedStatement stmt = conexion
                 .prepareStatement("SELECT EMPLEADO_NOMBRE FROM PROYECTO_EMPLEADO WHERE PROYECTO_NOMBRE = ?")) {
@@ -66,14 +66,20 @@ public class ProyectoH2Impl implements ProyectoDAO {
         return empleados;
     }
 
-    private List<Tarea> obtenerTareasAsignadas(String nombreProyecto) throws DAOException {  // Añadir este método
+    @Override
+    public List<Tarea> obtenerTareasAsignadas(String nombreProyecto) throws DAOException {
         List<Tarea> tareas = new ArrayList<>();
-        try (PreparedStatement stmt = conexion
-                .prepareStatement("SELECT TAREA_TITULO FROM PROYECTO_TAREA WHERE PROYECTO_NOMBRE = ?")) {
+        try (PreparedStatement stmt = conexion.prepareStatement(
+                "SELECT TAREA.TITULO, TAREA.DESCRIPCION, TAREA.HORAS_ESTIMADAS, TAREA.HORAS_REALES, TAREA.EMPLEADO_ASIGNADO " +
+                        "FROM PROYECTO_TAREA " +
+                        "JOIN TAREA ON PROYECTO_TAREA.TAREA_TITULO = TAREA.TITULO " +
+                        "WHERE PROYECTO_TAREA.PROYECTO_NOMBRE = ?")) {
             stmt.setString(1, nombreProyecto);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Tarea tarea = new Tarea(rs.getString("TAREA_TITULO"), "", 0, 0, null);
+                    Tarea tarea = new Tarea(rs.getString("TITULO"), rs.getString("DESCRIPCION"),
+                            rs.getDouble("HORAS_ESTIMADAS"), rs.getDouble("HORAS_REALES"),
+                            rs.getString("EMPLEADO_ASIGNADO"));
                     tareas.add(tarea);
                 }
             }
@@ -124,7 +130,7 @@ public class ProyectoH2Impl implements ProyectoDAO {
         }
     }
 
-    private void eliminarEmpleadosDeProyecto(String nombreProyecto) throws DAOException {
+    public void eliminarEmpleadosDeProyecto(String nombreProyecto) throws DAOException {
         try (PreparedStatement stmt = conexion
                 .prepareStatement("DELETE FROM PROYECTO_EMPLEADO WHERE PROYECTO_NOMBRE = ?")) {
             stmt.setString(1, nombreProyecto);
@@ -134,7 +140,7 @@ public class ProyectoH2Impl implements ProyectoDAO {
         }
     }
 
-    private void eliminarTareasDeProyecto(String nombreProyecto) throws DAOException {  // Añadir este método
+    public void eliminarTareasDeProyecto(String nombreProyecto) throws DAOException {  // Añadir este método
         try (PreparedStatement stmt = conexion
                 .prepareStatement("DELETE FROM PROYECTO_TAREA WHERE PROYECTO_NOMBRE = ?")) {
             stmt.setString(1, nombreProyecto);

@@ -34,7 +34,7 @@ public class ProyectoUI extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        tableModel = new DefaultTableModel(new String[]{"Nombre", "Descripción", "Empleados Asignados", "Tareas Asignadas"}, 0);  // Modificar esta línea
+        tableModel = new DefaultTableModel(new String[]{"Nombre", "Descripción", "Empleados Asignados", "Tareas Asignadas"}, 0);
         table = new JTable(tableModel);
         cargarProyectos();
 
@@ -42,7 +42,7 @@ public class ProyectoUI extends JFrame {
         add(scrollPane, BorderLayout.CENTER);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(8, 2));
+        panel.setLayout(new GridLayout(10, 2));
 
         panel.add(new JLabel("Nombre:"));
         nombreField = new JTextField();
@@ -110,7 +110,7 @@ public class ProyectoUI extends JFrame {
             }
         });
         panel.add(desasignarButton);
-        
+
         panel.add(new JLabel("Tareas:"));
         tareasComboBox = new JComboBox<>();
         cargarTareas();
@@ -133,6 +133,15 @@ public class ProyectoUI extends JFrame {
             }
         });
         panel.add(desasignarTareaButton);
+
+        JButton reportButton = new JButton("Generar Reporte");
+        reportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                generarReporte();
+            }
+        });
+        panel.add(reportButton);
 
         add(panel, BorderLayout.SOUTH);
 
@@ -175,8 +184,8 @@ public class ProyectoUI extends JFrame {
             JOptionPane.showMessageDialog(this, "Error al cargar empleados: " + e.getMessage());
         }
     }
-    
-    private void cargarTareas() {  // Añadir este método
+
+    private void cargarTareas() {
         try {
             List<Tarea> tareas = tareaService.obtenerTodasLasTareas();
             tareasComboBox.removeAllItems();
@@ -191,7 +200,7 @@ public class ProyectoUI extends JFrame {
     private void agregarProyecto() {
         String nombre = nombreField.getText();
         String descripcion = descripcionField.getText();
-        Proyecto nuevoProyecto = new Proyecto(nombre, descripcion, new ArrayList<>(), new ArrayList<>());  // Modificar esta línea
+        Proyecto nuevoProyecto = new Proyecto(nombre, descripcion, new ArrayList<>(), new ArrayList<>());
         try {
             proyectoService.guardarProyecto(nuevoProyecto);
             cargarProyectos();
@@ -204,7 +213,7 @@ public class ProyectoUI extends JFrame {
     private void actualizarProyecto() {
         String nombre = nombreField.getText();
         String descripcion = descripcionField.getText();
-        Proyecto proyecto = new Proyecto(nombre, descripcion, new ArrayList<>(), new ArrayList<>());  // Modificar esta línea
+        Proyecto proyecto = new Proyecto(nombre, descripcion, new ArrayList<>(), new ArrayList<>());
         try {
             proyectoService.guardarProyecto(proyecto);
             cargarProyectos();
@@ -264,7 +273,7 @@ public class ProyectoUI extends JFrame {
         }
     }
 
-    private void asignarTareaAProyecto() {  // Añadir este método
+    private void asignarTareaAProyecto() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow >= 0) {
             String nombreProyecto = tableModel.getValueAt(selectedRow, 0).toString();
@@ -281,7 +290,7 @@ public class ProyectoUI extends JFrame {
         }
     }
 
-    private void desasignarTareaDeProyecto() {  // Añadir este método
+    private void desasignarTareaDeProyecto() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow >= 0) {
             String nombreProyecto = tableModel.getValueAt(selectedRow, 0).toString();
@@ -295,6 +304,21 @@ public class ProyectoUI extends JFrame {
             }
         } else {
             JOptionPane.showMessageDialog(this, "Seleccione un proyecto para desasignar la tarea.");
+        }
+    }
+
+    private void generarReporte() {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow >= 0) {
+            String nombreProyecto = tableModel.getValueAt(selectedRow, 0).toString();
+            try {
+                String reporte = proyectoService.generarReporteProyecto(nombreProyecto);
+                JOptionPane.showMessageDialog(this, reporte);
+            } catch (ServiceException e) {
+                JOptionPane.showMessageDialog(this, "Error al generar el reporte: " + e.getMessage());
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione un proyecto para generar el reporte.");
         }
     }
 }
