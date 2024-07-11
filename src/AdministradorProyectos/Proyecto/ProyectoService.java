@@ -118,8 +118,10 @@ public class ProyectoService {
             Proyecto proyecto = proyectoDAO.obtenerProyectoPorNombre(nombreProyecto);
             double totalDinero = 0;
             for (Tarea tarea : proyecto.getTareasAsignadas()) {
-                Empleado empleado = empleadoService.obtenerEmpleadoPorNombre(tarea.getEmpleadoAsignado());
-                totalDinero += tarea.getHorasReales() * empleado.getCostoHora();
+                if (tarea.getEmpleadoAsignado() != null) { // Verificar que hay un empleado asignado
+                    Empleado empleado = empleadoService.obtenerEmpleadoPorNombre(tarea.getEmpleadoAsignado());
+                    totalDinero += tarea.getHorasReales() * empleado.getCostoHora();
+                }
             }
             return totalDinero;
         } catch (DAOException e) {
@@ -138,10 +140,9 @@ public class ProyectoService {
 
             for (Tarea tarea : tareasAsignadas) {
                 costoHoras += tarea.getHorasReales();
-                for (Empleado empleado : empleadosAsignados) {
-                    if (empleado.getNombre().equals(tarea.getEmpleadoAsignado())) {
-                        costoDinero += tarea.getHorasReales() * empleado.getCostoHora();
-                    }
+                if (tarea.getEmpleadoAsignado() != null) { // Verificar que hay un empleado asignado
+                    Empleado empleado = empleadoService.obtenerEmpleadoPorNombre(tarea.getEmpleadoAsignado());
+                    costoDinero += tarea.getHorasReales() * empleado.getCostoHora();
                 }
             }
 
@@ -152,3 +153,4 @@ public class ProyectoService {
         }
     }
 }
+

@@ -15,8 +15,8 @@ public class Main {
         try {
             // Inicializar servicios
             EmpleadoService empleadoService = new EmpleadoService(new EmpleadoH2Impl());
+            ProyectoService proyectoService = new ProyectoService(new ProyectoH2Impl(), empleadoService, new TareaService(new TareaH2Impl()));
             TareaService tareaService = new TareaService(new TareaH2Impl());
-            ProyectoService proyectoService = new ProyectoService(new ProyectoH2Impl(), empleadoService, tareaService);
 
             // Crear y mostrar el menú principal
             SwingUtilities.invokeLater(() -> {
@@ -29,3 +29,4 @@ public class Main {
         }
     }
 }
+
