@@ -88,7 +88,7 @@ public class ProyectoUI extends JFrame {
         });
         panel.add(recargarButton);
 
-        panel.add(new JLabel("Empleados Disponibles:"));
+        panel.add(new JLabel("Empleados Libres:"));
         empleadosComboBox = new JComboBox<>();
         cargarEmpleados();
         panel.add(empleadosComboBox);
