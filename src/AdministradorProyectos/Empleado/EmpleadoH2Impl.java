@@ -56,6 +56,20 @@ public class EmpleadoH2Impl implements EmpleadoDAO {
         }
         return empleados;
     }
+    
+    @Override
+    public List<Empleado> obtenerEmpleadosNoAsignados() throws DAOException {
+        List<Empleado> empleados = new ArrayList<>();
+        try (Statement stmt = conexion.createStatement(); ResultSet rs = stmt.executeQuery("SELECT * FROM EMPLEADO WHERE ESTADO IS NULL")) {
+            while (rs.next()) {
+                Empleado empleado = new Empleado(rs.getString("NOMBRE"), rs.getDouble("COSTO_HORA"), rs.getString("ESTADO"));
+                empleados.add(empleado);
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Error al obtener empleados no asignados", e);
+        }
+        return empleados;
+    }
 
     @Override
     public void actualizarEmpleado(Empleado empleado) throws DAOException {

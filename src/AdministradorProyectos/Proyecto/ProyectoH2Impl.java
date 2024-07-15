@@ -173,25 +173,23 @@ public class ProyectoH2Impl implements ProyectoDAO {
         }
     }
 
-
     @Override
-    public void desasignarEmpleadoDeProyecto(String nombreProyecto, String nombreEmpleado) throws DAOException {
-        try (PreparedStatement stmt = conexion
-                .prepareStatement("DELETE FROM PROYECTO_EMPLEADO WHERE PROYECTO_NOMBRE = ? AND EMPLEADO_NOMBRE = ?")) {
+    public void desasignarTodosEmpleadosDeProyecto(String nombreProyecto) throws DAOException {
+        try (PreparedStatement stmt = conexion.prepareStatement("UPDATE EMPLEADO SET ESTADO = NULL WHERE NOMBRE IN (SELECT EMPLEADO_NOMBRE FROM PROYECTO_EMPLEADO WHERE PROYECTO_NOMBRE = ?)")) {
             stmt.setString(1, nombreProyecto);
-            stmt.setString(2, nombreEmpleado);
             stmt.executeUpdate();
-
-            // Actualizar estado del empleado
-            try (PreparedStatement updateStmt = conexion
-                    .prepareStatement("UPDATE EMPLEADO SET ESTADO = NULL WHERE NOMBRE = ?")) {
-                updateStmt.setString(1, nombreEmpleado);
-                updateStmt.executeUpdate();
-            }
         } catch (SQLException e) {
-            throw new DAOException("Error al desasignar empleado del proyecto", e);
+            throw new DAOException("Error al desasignar todos los empleados del proyecto", e);
+        }
+
+        try (PreparedStatement stmt = conexion.prepareStatement("DELETE FROM PROYECTO_EMPLEADO WHERE PROYECTO_NOMBRE = ?")) {
+            stmt.setString(1, nombreProyecto);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("Error al eliminar las asignaciones de empleados del proyecto", e);
         }
     }
+
 
 
     @Override

@@ -68,6 +68,15 @@ public class EmpleadoUI extends JFrame {
 			}
 		});
 		panel.add(deleteButton);
+		
+		JButton refreshButton = new JButton("Refrescar");
+		refreshButton.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        obtenerTodosLosEmpleados();
+		    }
+		});
+		panel.add(refreshButton);
 
 		add(panel, BorderLayout.SOUTH);
 

@@ -61,4 +61,13 @@ public class EmpleadoService {
             throw new ServiceException("Error al obtener nombres de empleados", e);
         }
     }
+    
+    public List<Empleado> obtenerEmpleadosNoAsignados() throws ServiceException {
+        try {
+            return empleadoDAO.obtenerEmpleadosNoAsignados();
+        } catch (DAOException e) {
+            throw new ServiceException("Error al obtener empleados no asignados", e);
+        }
+    }
+
 }

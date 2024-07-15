@@ -68,11 +68,11 @@ public class ProyectoService {
         }
     }
 
-    public void desasignarEmpleadoDeProyecto(String nombreProyecto, String nombreEmpleado) throws ServiceException {
+    public void desasignarTodosEmpleadosDeProyecto(String nombreProyecto) throws ServiceException {
         try {
-            proyectoDAO.desasignarEmpleadoDeProyecto(nombreProyecto, nombreEmpleado);
+            proyectoDAO.desasignarTodosEmpleadosDeProyecto(nombreProyecto);
         } catch (DAOException e) {
-            throw new ServiceException("Error al desasignar el empleado del proyecto", e);
+            throw new ServiceException("Error al desasignar todos los empleados del proyecto", e);
         }
     }
 

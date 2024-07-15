@@ -19,8 +19,6 @@ public interface ProyectoDAO {
 
 	void asignarEmpleadoAProyecto(String nombreProyecto, String nombreEmpleado) throws DAOException;
 
-	void desasignarEmpleadoDeProyecto(String nombreProyecto, String nombreEmpleado) throws DAOException;
-
 	void asignarTareaAProyecto(String nombreProyecto, String tituloTarea) throws DAOException;
 
 	void desasignarTareaDeProyecto(String nombreProyecto, String tituloTarea) throws DAOException;
@@ -28,4 +26,6 @@ public interface ProyectoDAO {
 	List<Tarea> obtenerTareasAsignadas(String nombreProyecto) throws DAOException; // Nuevo método
 
     List<Empleado> obtenerEmpleadosAsignados(String nombreProyecto) throws DAOException;
+
+	void desasignarTodosEmpleadosDeProyecto(String nombreProyecto) throws DAOException;
 }

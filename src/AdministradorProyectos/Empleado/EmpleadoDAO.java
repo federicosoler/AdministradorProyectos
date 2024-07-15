@@ -14,4 +14,6 @@ public interface EmpleadoDAO {
 	void actualizarEmpleado(Empleado empleado) throws DAOException;
 
 	void eliminarEmpleado(String nombre) throws DAOException;
+
+	List<Empleado> obtenerEmpleadosNoAsignados() throws DAOException;
 }

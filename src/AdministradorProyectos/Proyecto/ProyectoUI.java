@@ -79,7 +79,7 @@ public class ProyectoUI extends JFrame {
         });
         panel.add(deleteButton);
 
-        JButton recargarButton = new JButton("Recargar Empleados y Tareas");
+        JButton recargarButton = new JButton("Refrescar Empleados y Tareas");
         recargarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -102,14 +102,14 @@ public class ProyectoUI extends JFrame {
         });
         panel.add(asignarButton);
 
-        JButton desasignarButton = new JButton("Desasignar Empleado");
-        desasignarButton.addActionListener(new ActionListener() {
+        JButton desasignarTodosButton = new JButton("Desasignar Empleados");
+        desasignarTodosButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                desasignarEmpleadoDeProyecto();
+                desasignarTodosEmpleadosDeProyecto();
             }
         });
-        panel.add(desasignarButton);
+        panel.add(desasignarTodosButton);
 
         panel.add(new JLabel("Tareas sin Proyecto:"));
         tareasComboBox = new JComboBox<>();
@@ -180,7 +180,7 @@ public class ProyectoUI extends JFrame {
 
     private void cargarEmpleados() {
         try {
-            List<Empleado> empleados = empleadoService.obtenerTodosLosEmpleados();
+            List<Empleado> empleados = empleadoService.obtenerEmpleadosNoAsignados();
             empleadosComboBox.removeAllItems();
             for (Empleado empleado : empleados) {
                 empleadosComboBox.addItem(empleado.getNombre());
@@ -189,6 +189,7 @@ public class ProyectoUI extends JFrame {
             JOptionPane.showMessageDialog(this, "Error al cargar empleados: " + e.getMessage());
         }
     }
+
 
     private void cargarTareas() {
         try {
@@ -261,20 +262,19 @@ public class ProyectoUI extends JFrame {
         }
     }
 
-    private void desasignarEmpleadoDeProyecto() {
+    private void desasignarTodosEmpleadosDeProyecto() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow >= 0) {
             String nombreProyecto = tableModel.getValueAt(selectedRow, 0).toString();
-            String nombreEmpleado = empleadosComboBox.getSelectedItem().toString();
             try {
-                proyectoService.desasignarEmpleadoDeProyecto(nombreProyecto, nombreEmpleado);
+                proyectoService.desasignarTodosEmpleadosDeProyecto(nombreProyecto);
                 cargarProyectos();
-                JOptionPane.showMessageDialog(this, "Empleado desasignado correctamente.");
+                JOptionPane.showMessageDialog(this, "Todos los empleados desasignados correctamente.");
             } catch (ServiceException e) {
-                JOptionPane.showMessageDialog(this, "Error al desasignar empleado del proyecto: " + e.getMessage());
+                JOptionPane.showMessageDialog(this, "Error al desasignar empleados del proyecto: " + e.getMessage());
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Seleccione un proyecto para desasignar el empleado.");
+            JOptionPane.showMessageDialog(this, "Seleccione un proyecto para desasignar empleados.");
         }
     }
 
