@@ -21,6 +21,7 @@ public class TareaUI extends JFrame {
     private JTextField horasEstimadasField;
     private JTextField horasRealesField;
     private JComboBox<String> empleadoComboBox;
+    private JComboBox<String> estadoComboBox;
 
     public TareaUI(TareaService tareaService, EmpleadoService empleadoService) {
         this.tareaService = tareaService;
@@ -32,7 +33,7 @@ public class TareaUI extends JFrame {
         setLayout(new BorderLayout());
 
         tableModel = new DefaultTableModel(
-                new String[]{"Título", "Descripción", "Horas Estimadas", "Horas Reales", "Empleado Asignado"}, 0);
+                new String[]{"Título", "Descripción", "Horas Estimadas", "Horas Reales", "Empleado Asignado", "Estado"}, 0);
         table = new JTable(tableModel);
         cargarTareas();
 
@@ -40,7 +41,7 @@ public class TareaUI extends JFrame {
         add(scrollPane, BorderLayout.CENTER);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(8, 2));
+        panel.setLayout(new GridLayout(10, 2));
 
         panel.add(new JLabel("Título:"));
         tituloField = new JTextField();
@@ -57,6 +58,10 @@ public class TareaUI extends JFrame {
         panel.add(new JLabel("Horas Reales:"));
         horasRealesField = new JTextField();
         panel.add(horasRealesField);
+
+        panel.add(new JLabel("Estado:"));
+        estadoComboBox = new JComboBox<>(new String[]{"NO_INICIADA", "EN_PROCESO", "TERMINADA"});
+        panel.add(estadoComboBox);
 
         JButton addButton = new JButton("Agregar");
         addButton.addActionListener(new ActionListener() {
@@ -117,6 +122,24 @@ public class TareaUI extends JFrame {
         });
         panel.add(desasignarButton);
 
+        JButton asignarEstadoButton = new JButton("Asignar Estado");
+        asignarEstadoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                asignarEstado();
+            }
+        });
+        panel.add(asignarEstadoButton);
+
+        JButton desasignarEstadoButton = new JButton("Desasignar Estado");
+        desasignarEstadoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                desasignarEstado();
+            }
+        });
+        panel.add(desasignarEstadoButton);
+
         add(panel, BorderLayout.SOUTH);
 
         table.getSelectionModel().addListSelectionListener(event -> {
@@ -126,6 +149,7 @@ public class TareaUI extends JFrame {
                 horasEstimadasField.setText(getValueFromTable(table, table.getSelectedRow(), 2));
                 horasRealesField.setText(getValueFromTable(table, table.getSelectedRow(), 3));
                 empleadoComboBox.setSelectedItem(getValueFromTable(table, table.getSelectedRow(), 4));
+                estadoComboBox.setSelectedItem(getValueFromTable(table, table.getSelectedRow(), 5));
             }
         });
     }
@@ -141,7 +165,7 @@ public class TareaUI extends JFrame {
             tableModel.setRowCount(0);
             for (Tarea tarea : tareas) {
                 tableModel.addRow(new Object[]{tarea.getTitulo(), tarea.getDescripcion(), tarea.getHorasEstimadas(),
-                        tarea.getHorasReales(), tarea.getEmpleadoAsignado()});
+                        tarea.getHorasReales(), tarea.getEmpleadoAsignado(), tarea.getEstado()});
             }
         } catch (ServiceException e) {
             JOptionPane.showMessageDialog(this, "Error al cargar las tareas: " + e.getMessage());
@@ -167,25 +191,27 @@ public class TareaUI extends JFrame {
             double horasEstimadas = Double.parseDouble(horasEstimadasField.getText());
             double horasReales = Double.parseDouble(horasRealesField.getText());
 
-            // Validar campos vacíos o nulos
             if (titulo.isEmpty() || descripcion.isEmpty()) {
                 throw new IllegalArgumentException("Todos los campos deben estar llenos.");
             }
 
-            // Crear una nueva tarea sin asignar un empleado
-            Tarea nuevaTarea = new Tarea(titulo, descripcion, horasEstimadas, horasReales, null);
+            Tarea nuevaTarea = new Tarea(titulo, descripcion, horasEstimadas, horasReales, null, null);
 
             tareaService.guardarTarea(nuevaTarea);
             cargarTareas();
             JOptionPane.showMessageDialog(this, "Tarea agregada correctamente.");
         } catch (ServiceException e) {
+            e.printStackTrace();  // Imprimir el stack trace de la excepción
             JOptionPane.showMessageDialog(this, "Error al agregar la tarea: " + e.getMessage());
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Por favor ingresa valores válidos para las horas estimadas y reales.");
+            e.printStackTrace();  // Imprimir el stack trace de la excepción
+            JOptionPane.showMessageDialog(this, "Error de formato numérico en las horas: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+            e.printStackTrace();  // Imprimir el stack trace de la excepción
+            JOptionPane.showMessageDialog(this, "Error en los datos ingresados: " + e.getMessage());
         }
     }
+
 
 
     private void actualizarTarea() {
@@ -198,10 +224,11 @@ public class TareaUI extends JFrame {
                 double horasEstimadas = Double.parseDouble(horasEstimadasField.getText());
                 double horasReales = Double.parseDouble(horasRealesField.getText());
                 String empleadoAsignado = (String) empleadoComboBox.getSelectedItem();
+                String estado = (String) estadoComboBox.getSelectedItem();
 
                 tareaService.eliminarTarea(tituloAntiguo);
 
-                Tarea tarea = new Tarea(tituloNuevo, descripcion, horasEstimadas, horasReales, empleadoAsignado);
+                Tarea tarea = new Tarea(tituloNuevo, descripcion, horasEstimadas, horasReales, empleadoAsignado, estado);
                 tareaService.guardarTarea(tarea);
 
                 cargarTareas();
@@ -264,6 +291,43 @@ public class TareaUI extends JFrame {
             }
         } else {
             JOptionPane.showMessageDialog(this, "Seleccione una tarea para desasignar el empleado.");
+        }
+    }
+
+    private void asignarEstado() {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow >= 0) {
+            try {
+                String titulo = (String) tableModel.getValueAt(selectedRow, 0);
+                String estado = (String) estadoComboBox.getSelectedItem();
+                Tarea tarea = tareaService.obtenerTareaPorTitulo(titulo);
+                tarea.setEstado(estado);
+                tareaService.actualizarTarea(tarea);
+                cargarTareas();
+                JOptionPane.showMessageDialog(this, "Estado asignado correctamente.");
+            } catch (ServiceException e) {
+                JOptionPane.showMessageDialog(this, "Error al asignar el estado: " + e.getMessage());
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione una tarea para asignar el estado.");
+        }
+    }
+
+    private void desasignarEstado() {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow >= 0) {
+            try {
+                String titulo = (String) tableModel.getValueAt(selectedRow, 0);
+                Tarea tarea = tareaService.obtenerTareaPorTitulo(titulo);
+                tarea.setEstado(null);
+                tareaService.actualizarTarea(tarea);
+                cargarTareas();
+                JOptionPane.showMessageDialog(this, "Estado desasignado correctamente.");
+            } catch (ServiceException e) {
+                JOptionPane.showMessageDialog(this, "Error al desasignar el estado: " + e.getMessage());
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione una tarea para desasignar el estado.");
         }
     }
 }

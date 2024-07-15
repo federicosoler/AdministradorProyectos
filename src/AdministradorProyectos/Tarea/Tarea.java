@@ -6,13 +6,15 @@ public class Tarea {
 	private double horasEstimadas;
 	private double horasReales;
 	private String empleadoAsignado;
+	private String estado;
 
-	public Tarea(String titulo, String descripcion, double horasEstimadas, double horasReales, String empleadoAsignado) {
+	public Tarea(String titulo, String descripcion, double horasEstimadas, double horasReales, String empleadoAsignado, String estado) {
 		this.titulo = titulo;
 		this.descripcion = descripcion;
 		this.horasEstimadas = horasEstimadas;
 		this.horasReales = horasReales;
 		this.empleadoAsignado = empleadoAsignado;
+	    this.estado = estado;
 	}
 
 	// Getters y Setters
@@ -54,5 +56,13 @@ public class Tarea {
 
 	public void setEmpleadoAsignado(String empleadoAsignado) {
 		this.empleadoAsignado = empleadoAsignado;
+	}
+	
+	public String getEstado() {
+	    return estado;
+	}
+
+	public void setEstado(String estado) {
+	    this.estado = estado;
 	}
 }

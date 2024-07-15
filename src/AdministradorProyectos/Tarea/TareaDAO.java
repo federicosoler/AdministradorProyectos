@@ -13,5 +13,5 @@ public interface TareaDAO {
 
     void eliminarTarea(String titulo) throws DAOException;
 
-    Tarea obtenerTareaPorTitulo(String titulo) throws DAOException;  // Nuevo método
+    Tarea obtenerTareaPorTitulo(String titulo) throws DAOException;
 }

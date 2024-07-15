@@ -70,7 +70,7 @@ public class ProyectoH2Impl implements ProyectoDAO {
     public List<Tarea> obtenerTareasAsignadas(String nombreProyecto) throws DAOException {
         List<Tarea> tareas = new ArrayList<>();
         try (PreparedStatement stmt = conexion.prepareStatement(
-                "SELECT TAREA.TITULO, TAREA.DESCRIPCION, TAREA.HORAS_ESTIMADAS, TAREA.HORAS_REALES, TAREA.EMPLEADO_ASIGNADO " +
+                "SELECT TAREA.TITULO, TAREA.DESCRIPCION, TAREA.HORAS_ESTIMADAS, TAREA.HORAS_REALES, TAREA.EMPLEADO_ASIGNADO, TAREA.ESTADO " + // Añadir TAREA.ESTADO aquí
                         "FROM PROYECTO_TAREA " +
                         "JOIN TAREA ON PROYECTO_TAREA.TAREA_TITULO = TAREA.TITULO " +
                         "WHERE PROYECTO_TAREA.PROYECTO_NOMBRE = ?")) {
@@ -79,7 +79,7 @@ public class ProyectoH2Impl implements ProyectoDAO {
                 while (rs.next()) {
                     Tarea tarea = new Tarea(rs.getString("TITULO"), rs.getString("DESCRIPCION"),
                             rs.getDouble("HORAS_ESTIMADAS"), rs.getDouble("HORAS_REALES"),
-                            rs.getString("EMPLEADO_ASIGNADO"));
+                            rs.getString("EMPLEADO_ASIGNADO"), rs.getString("ESTADO")); // Añadir rs.getString("ESTADO") aquí
                     tareas.add(tarea);
                 }
             }
@@ -88,6 +88,7 @@ public class ProyectoH2Impl implements ProyectoDAO {
         }
         return tareas;
     }
+
 
     @Override
     public Proyecto obtenerProyectoPorNombre(String nombre) throws DAOException {
