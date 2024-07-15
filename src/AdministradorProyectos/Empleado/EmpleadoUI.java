@@ -32,7 +32,7 @@ public class EmpleadoUI extends JFrame {
 		add(scrollPane, BorderLayout.CENTER);
 
 		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(3, 2));
+		panel.setLayout(new GridLayout(2, 2));
 
 		panel.add(new JLabel("Nombre:"));
 		nombreField = new JTextField();

@@ -26,13 +26,14 @@ public class ProyectoH2Impl implements ProyectoDAO {
             for (Empleado empleado : proyecto.getEmpleadosAsignados()) {
                 asignarEmpleadoAProyecto(proyecto.getNombre(), empleado.getNombre());
             }
-            for (Tarea tarea : proyecto.getTareasAsignadas()) {  // Añadir esta línea
+            for (Tarea tarea : proyecto.getTareasAsignadas()) {
                 asignarTareaAProyecto(proyecto.getNombre(), tarea.getTitulo());
             }
         } catch (SQLException e) {
             throw new DAOException("Error al guardar el proyecto", e);
         }
     }
+
 
     @Override
     public List<Proyecto> obtenerTodosLosProyectos() throws DAOException {

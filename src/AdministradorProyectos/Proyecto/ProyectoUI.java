@@ -79,16 +79,16 @@ public class ProyectoUI extends JFrame {
         });
         panel.add(deleteButton);
 
-        JButton recargarEmpleadosButton = new JButton("Recargar Lista de Empleados");
-        recargarEmpleadosButton.addActionListener(new ActionListener() {
+        JButton recargarButton = new JButton("Recargar Empleados y Tareas");
+        recargarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cargarEmpleados();
+                recargarEmpleadosYtareas();
             }
         });
-        panel.add(recargarEmpleadosButton);
+        panel.add(recargarButton);
 
-        panel.add(new JLabel("Empleados:"));
+        panel.add(new JLabel("Empleados Disponibles:"));
         empleadosComboBox = new JComboBox<>();
         cargarEmpleados();
         panel.add(empleadosComboBox);
@@ -111,7 +111,7 @@ public class ProyectoUI extends JFrame {
         });
         panel.add(desasignarButton);
 
-        panel.add(new JLabel("Tareas:"));
+        panel.add(new JLabel("Tareas sin Proyecto:"));
         tareasComboBox = new JComboBox<>();
         cargarTareas();
         panel.add(tareasComboBox);
@@ -157,6 +157,11 @@ public class ProyectoUI extends JFrame {
                 tareasComboBox.setSelectedItem(tareasAsignadas);
             }
         });
+    }
+    
+    private void recargarEmpleadosYtareas() {
+        cargarEmpleados();
+        cargarTareas();
     }
 
     private void cargarProyectos() {

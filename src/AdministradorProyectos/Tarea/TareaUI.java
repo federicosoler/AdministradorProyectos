@@ -59,10 +59,6 @@ public class TareaUI extends JFrame {
         horasRealesField = new JTextField();
         panel.add(horasRealesField);
 
-        panel.add(new JLabel("Estado:"));
-        estadoComboBox = new JComboBox<>(new String[]{"NO_INICIADA", "EN_PROCESO", "TERMINADA"});
-        panel.add(estadoComboBox);
-
         JButton addButton = new JButton("Agregar");
         addButton.addActionListener(new ActionListener() {
             @Override
@@ -99,7 +95,7 @@ public class TareaUI extends JFrame {
         });
         panel.add(reloadButton);
 
-        panel.add(new JLabel("Asignar Empleado:"));
+        panel.add(new JLabel("Pool de Empleados del Proyecto:"));
         empleadoComboBox = new JComboBox<>();
         cargarEmpleadosDisponibles();
         panel.add(empleadoComboBox);
@@ -121,6 +117,10 @@ public class TareaUI extends JFrame {
             }
         });
         panel.add(desasignarButton);
+        
+        panel.add(new JLabel("Estado:"));
+        estadoComboBox = new JComboBox<>(new String[]{"NO_INICIADA", "EN_PROCESO", "TERMINADA"});
+        panel.add(estadoComboBox);
 
         JButton asignarEstadoButton = new JButton("Asignar Estado");
         asignarEstadoButton.addActionListener(new ActionListener() {
