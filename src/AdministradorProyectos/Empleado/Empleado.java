@@ -3,10 +3,12 @@ package AdministradorProyectos.Empleado;
 public class Empleado {
 	private String nombre;
 	private double costoHora;
+	private String estado;
 
-	public Empleado(String nombre, double costoHora) {
+	public Empleado(String nombre, double costoHora, String estado) {
 		this.nombre = nombre;
 		this.costoHora = costoHora;
+		this.estado = estado;
 	}
 
 	public String getNombre() {
@@ -23,5 +25,13 @@ public class Empleado {
 
 	public void setCostoHora(double costoHora) {
 		this.costoHora = costoHora;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 }

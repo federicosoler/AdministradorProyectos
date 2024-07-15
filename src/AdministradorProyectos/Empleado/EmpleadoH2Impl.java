@@ -33,7 +33,7 @@ public class EmpleadoH2Impl implements EmpleadoDAO {
             stmt.setString(1, nombre);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    empleado = new Empleado(rs.getString("NOMBRE"), rs.getDouble("COSTO_HORA"));
+                    empleado = new Empleado(rs.getString("NOMBRE"), rs.getDouble("COSTO_HORA"), rs.getString("ESTADO"));
                 }
             }
         } catch (SQLException e) {
@@ -48,7 +48,7 @@ public class EmpleadoH2Impl implements EmpleadoDAO {
         try (Statement stmt = conexion.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT * FROM EMPLEADO")) {
             while (rs.next()) {
-                Empleado empleado = new Empleado(rs.getString("NOMBRE"), rs.getDouble("COSTO_HORA"));
+                Empleado empleado = new Empleado(rs.getString("NOMBRE"), rs.getDouble("COSTO_HORA"), rs.getString("ESTADO"));
                 empleados.add(empleado);
             }
         } catch (SQLException e) {
