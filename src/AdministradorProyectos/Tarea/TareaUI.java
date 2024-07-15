@@ -55,11 +55,11 @@ public class TareaUI extends JFrame {
         horasEstimadasField = new JTextField();
         panel.add(horasEstimadasField);
 
-        panel.add(new JLabel("Horas Reales:"));
+        panel.add(new JLabel("Horas Reales (Poner 0 si no se sabe todavía):"));
         horasRealesField = new JTextField();
         panel.add(horasRealesField);
 
-        JButton addButton = new JButton("Agregar");
+        JButton addButton = new JButton("Crear Nueva Tarea");
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -68,7 +68,8 @@ public class TareaUI extends JFrame {
         });
         panel.add(addButton);
 
-        JButton updateButton = new JButton("Actualizar");
+
+        JButton updateButton = new JButton("Modificar Tarea Seleccionada");
         updateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -77,7 +78,7 @@ public class TareaUI extends JFrame {
         });
         panel.add(updateButton);
 
-        JButton deleteButton = new JButton("Eliminar");
+        JButton deleteButton = new JButton("Eliminar Tarea Seleccionada");
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -86,7 +87,7 @@ public class TareaUI extends JFrame {
         });
         panel.add(deleteButton);
 
-        JButton reloadButton = new JButton("Recargar Lista de Empleados");
+        JButton reloadButton = new JButton("Refrescar Listado de Empleados");
         reloadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -100,7 +101,7 @@ public class TareaUI extends JFrame {
         cargarEmpleadosDisponibles();
         panel.add(empleadoComboBox);
 
-        JButton asignarButton = new JButton("Asignar Empleado");
+        JButton asignarButton = new JButton("Asignar Empleado a Tarea Seleccionada");
         asignarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -109,7 +110,7 @@ public class TareaUI extends JFrame {
         });
         panel.add(asignarButton);
 
-        JButton desasignarButton = new JButton("Desasignar Empleado");
+        JButton desasignarButton = new JButton("Desasignar Empleado de Tarea Seleccionada");
         desasignarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -122,7 +123,7 @@ public class TareaUI extends JFrame {
         estadoComboBox = new JComboBox<>(new String[]{"NO_INICIADA", "EN_PROCESO", "TERMINADA"});
         panel.add(estadoComboBox);
 
-        JButton asignarEstadoButton = new JButton("Asignar Estado");
+        JButton asignarEstadoButton = new JButton("Asignar Estado a Tarea Seleccionada");
         asignarEstadoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -131,7 +132,7 @@ public class TareaUI extends JFrame {
         });
         panel.add(asignarEstadoButton);
 
-        JButton desasignarEstadoButton = new JButton("Desasignar Estado");
+        JButton desasignarEstadoButton = new JButton("Desasignar Estado de Tarea Seleccionada");
         desasignarEstadoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
