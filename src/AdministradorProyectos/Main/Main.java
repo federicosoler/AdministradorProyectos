@@ -18,7 +18,7 @@ public class Main {
             ProyectoService proyectoService = new ProyectoService(new ProyectoH2Impl(), empleadoService, new TareaService(new TareaH2Impl()));
             TareaService tareaService = new TareaService(new TareaH2Impl());
 
-            // Crear y mostrar el menú principal HOLAHOLAHOLA
+            // Crear y mostrar el menú principal
             SwingUtilities.invokeLater(() -> {
                 MenuPrincipal menuPrincipal = new MenuPrincipal(empleadoService, proyectoService, tareaService);
                 menuPrincipal.setVisible(true);
